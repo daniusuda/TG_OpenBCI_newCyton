@@ -1,0 +1,726 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cyton &#8212; TG_Projeto_BCI_4  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="TG_Projeto_BCI_4  documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for cyton</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Core OpenBCI object for handling connections and samples from the board.</span>
+
+<span class="sd">EXAMPLE USE:</span>
+
+<span class="sd">def handle_sample(sample):</span>
+<span class="sd">  print(sample.channel_data)</span>
+<span class="sd">c</span>
+<span class="sd">board = OpenBCIBoard()</span>
+<span class="sd">board.print_register_settings()</span>
+<span class="sd">board.start_streaming(handle_sample)</span>
+
+<span class="sd">NOTE: If daisy modules is enabled, the callback will occur every two samples, hence &quot;packet_id&quot;</span>
+<span class="sd"> will only contain even numbers. As a side effect, the sampling rate will be divided by 2.</span>
+
+<span class="sd">FIXME: at the moment we can just force daisy mode, do not check that the module is detected.</span>
+<span class="sd">TODO: enable impedance</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">serial</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">timeit</span>
+<span class="kn">import</span> <span class="nn">atexit</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="c1">#sample rate de 250 SPS é fixo para placa Cyton com dongle</span>
+<span class="n">SAMPLE_RATE</span> <span class="o">=</span> <span class="mf">250.0</span>  <span class="c1"># Hz</span>
+<span class="n">START_BYTE</span> <span class="o">=</span> <span class="mh">0xA0</span>  <span class="c1"># start of data packet</span>
+<span class="n">END_BYTE</span> <span class="o">=</span> <span class="mh">0xC0</span>  <span class="c1"># end of data packet</span>
+<span class="n">ADS1299_Vref</span> <span class="o">=</span> <span class="mf">4.5</span>  <span class="c1"># reference voltage for ADC in ADS1299.  set by its hardware</span>
+<span class="n">ADS1299_gain</span> <span class="o">=</span> <span class="mf">24.0</span>  <span class="c1"># assumed gain setting for ADS1299.  set by its Arduino code</span>
+<span class="n">scale_fac_uVolts_per_count</span> <span class="o">=</span> <span class="n">ADS1299_Vref</span> <span class="o">/</span> \
+    <span class="nb">float</span><span class="p">((</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">ADS1299_gain</span> <span class="o">*</span> <span class="mf">1000000.</span>
+<span class="n">scale_fac_accel_G_per_count</span> <span class="o">=</span> <span class="mf">0.002</span> <span class="o">/</span> \
+    <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  <span class="c1"># assume set to +/4G, so 2 mG</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Importado cyton.py&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">#Commands for in SDK http://docs.openbci.com/software/01-Open BCI_SDK:</span>
+
+<span class="sd">command_stop = &quot;s&quot;;</span>
+<span class="sd">command_startText = &quot;x&quot;;</span>
+<span class="sd">command_startBinary = &quot;b&quot;;</span>
+<span class="sd">command_startBinary_wAux = &quot;n&quot;;</span>
+<span class="sd">command_startBinary_4chan = &quot;v&quot;;</span>
+<span class="sd">command_activateFilters = &quot;F&quot;;</span>
+<span class="sd">command_deactivateFilters = &quot;g&quot;;</span>
+<span class="sd">command_deactivate_channel = {&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;};</span>
+<span class="sd">command_activate_channel = {&quot;q&quot;, &quot;w&quot;, &quot;e&quot;, &quot;r&quot;, &quot;t&quot;, &quot;y&quot;, &quot;u&quot;, &quot;i&quot;};</span>
+<span class="sd">command_activate_leadoffP_channel = {&quot;!&quot;, &quot;@&quot;, &quot;#&quot;, &quot;$&quot;, &quot;%&quot;, &quot;^&quot;, &quot;&amp;&quot;, &quot;*&quot;};  //shift + 1-8</span>
+<span class="sd">command_deactivate_leadoffP_channel = {&quot;Q&quot;, &quot;W&quot;, &quot;E&quot;, &quot;R&quot;, &quot;T&quot;, &quot;Y&quot;, &quot;U&quot;, &quot;I&quot;};   //letters (plus shift) right below 1-8</span>
+<span class="sd">command_activate_leadoffN_channel = {&quot;A&quot;, &quot;S&quot;, &quot;D&quot;, &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;J&quot;, &quot;K&quot;}; //letters (plus shift) below the letters below 1-8</span>
+<span class="sd">command_deactivate_leadoffN_channel = {&quot;Z&quot;, &quot;X&quot;, &quot;C&quot;, &quot;V&quot;, &quot;B&quot;, &quot;N&quot;, &quot;M&quot;, &quot;&lt;&quot;};   //letters (plus shift) below the letters below the letters below 1-8</span>
+<span class="sd">command_biasAuto = &quot;`&quot;;</span>
+<span class="sd">command_biasFixed = &quot;~&quot;;</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="OpenBCICyton"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton">[docs]</a><span class="k">class</span> <span class="nc">OpenBCICyton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handle a connection to an OpenBCI board.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      port: The port to connect to.</span>
+<span class="sd">      baud: The baud of the serial connection.</span>
+<span class="sd">      daisy: Enable or disable daisy module and 16 chans readings</span>
+<span class="sd">      aux, impedance: unused, for compatibility with ganglion API</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">baud</span><span class="o">=</span><span class="mi">115200</span><span class="p">,</span> <span class="n">filter_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">daisy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">aux</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">impedance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>  <span class="c1"># print_incoming_text needs log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">baudrate</span> <span class="o">=</span> <span class="n">baud</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="c1">#self.ser.write(b&#39;?&#39;)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">port</span><span class="p">:</span>
+            <span class="n">port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_port</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="c1"># might be handy to know API</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board_type</span> <span class="o">=</span> <span class="s2">&quot;cyton&quot;</span>
+        <span class="c1">#print(&quot;(cyton.py)Connecting to V3 at port %s&quot; % (port))</span>
+        <span class="k">if</span> <span class="n">port</span> <span class="o">==</span> <span class="s2">&quot;loop://&quot;</span><span class="p">:</span>
+            <span class="c1"># For testing purposes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">serial_for_url</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="n">baud</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="n">baud</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+        <span class="c1">#print(&quot;cyton.py Serial established...&quot;)</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Initialize 32-bit board, doesn&#39;t affect 8bit board</span>
+        <span class="c1">#self.ser.write(b&#39;v&#39;)</span>
+
+        <span class="c1"># wait for device to be ready</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#        if port != &quot;loop://&quot;:</span>
+<span class="c1">#            self.print_incoming_text()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtering_data</span> <span class="o">=</span> <span class="n">filter_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaling_output</span> <span class="o">=</span> <span class="n">scaled_output</span>
+        <span class="c1"># number of EEG channels per sample *from the board*</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eeg_channels_per_sample</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="c1"># number of AUX channels per sample *from the board*</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_channels_per_sample</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imp_channels_per_sample</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># impedance check not supported at the moment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span> <span class="o">=</span> <span class="n">daisy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span> <span class="o">=</span> <span class="n">OpenBCISample</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[])</span>  <span class="c1"># used for daisy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attempt_reconnect</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_reconnect</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reconnect_freq</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Disconnects from board when terminated</span>
+        <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OpenBCICyton.getBoardType"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.getBoardType">[docs]</a>    <span class="k">def</span> <span class="nf">getBoardType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the version of the board &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_type</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.setImpedance"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.setImpedance">[docs]</a>    <span class="k">def</span> <span class="nf">setImpedance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Enable/disable impedance measure. Not implemented at the moment on Cyton. &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.ser_write"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.ser_write">[docs]</a>    <span class="k">def</span> <span class="nf">ser_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Access serial port object for write&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">b</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.ser_read"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.ser_read">[docs]</a>    <span class="k">def</span> <span class="nf">ser_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Access serial port object for read&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.ser_inWaiting"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.ser_inWaiting">[docs]</a>    <span class="k">def</span> <span class="nf">ser_inWaiting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Access serial port object for inWaiting&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">inWaiting</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.getSampleRate"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.getSampleRate">[docs]</a>    <span class="k">def</span> <span class="nf">getSampleRate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SAMPLE_RATE</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SAMPLE_RATE</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.getNbEEGChannels"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.getNbEEGChannels">[docs]</a>    <span class="k">def</span> <span class="nf">getNbEEGChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eeg_channels_per_sample</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eeg_channels_per_sample</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.getNbAUXChannels"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.getNbAUXChannels">[docs]</a>    <span class="k">def</span> <span class="nf">getNbAUXChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux_channels_per_sample</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.getNbImpChannels"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.getNbImpChannels">[docs]</a>    <span class="k">def</span> <span class="nf">getNbImpChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imp_channels_per_sample</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.start_streaming"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.start_streaming">[docs]</a>    <span class="k">def</span> <span class="nf">start_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">lapse</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start handling streaming data from the board. Call a provided callback</span>
+<span class="sd">        for every single sample that is processed (every two samples with daisy module).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          callback: A callback function, or a list of functions, that will receive a single</span>
+<span class="sd">           argument of the OpenBCISample object captured.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
+
+        <span class="c1"># Enclose callback funtion in a list if it comes alone</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="p">[</span><span class="n">callback</span><span class="p">]</span>
+
+        <span class="c1"># Initialize check connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_connection</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+
+            <span class="c1"># read current sample</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_serial_binary</span><span class="p">()</span>
+            <span class="c1"># if a daisy module is attached, wait to concatenate two samples</span>
+            <span class="c1"># (main board + daisy) before passing it to callback</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="c1"># odd sample: daisy sample, save for later</span>
+                <span class="k">if</span> <span class="o">~</span><span class="n">sample</span><span class="o">.</span><span class="n">id</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span> <span class="o">=</span> <span class="n">sample</span>
+                <span class="c1"># even sample: concatenate and send if last sample was the fist part,</span>
+                <span class="c1">#  otherwise drop the packet</span>
+                <span class="k">elif</span> <span class="n">sample</span><span class="o">.</span><span class="n">id</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                    <span class="c1"># the aux data will be the average between the two samples, as the channel</span>
+                    <span class="c1">#  samples themselves have been averaged by the board</span>
+                    <span class="n">avg_aux_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">aux_data</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span><span class="o">.</span><span class="n">aux_data</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">whole_sample</span> <span class="o">=</span> <span class="n">OpenBCISample</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                                 <span class="n">sample</span><span class="o">.</span><span class="n">channel_data</span> <span class="o">+</span>
+                                                 <span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span><span class="o">.</span><span class="n">channel_data</span><span class="p">,</span>
+                                                 <span class="n">avg_aux_data</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">callback</span><span class="p">:</span>
+                        <span class="n">call</span><span class="p">(</span><span class="n">whole_sample</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">callback</span><span class="p">:</span>
+                    <span class="n">call</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">lapse</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lapse</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      PARSER:</span>
+<span class="sd">      Parses incoming data packet into OpenBCISample.</span>
+<span class="sd">      Incoming Packet Structure:</span>
+<span class="sd">      Start Byte(1)|Sample ID(1)|Channel Data(24)|Aux Data(6)|End Byte(1)</span>
+<span class="sd">      0xA0|0-255|8, 3-byte signed ints|3 2-byte signed ints|0xC0</span>
+<span class="sd">  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_read_serial_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_bytes_to_skip</span><span class="o">=</span><span class="mi">3000</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">bb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">bb</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Device appears to be stalled. Quitting...&#39;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Device Stalled&#39;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+                <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\xFF</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">bb</span>
+
+        <span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_bytes_to_skip</span><span class="p">):</span>
+
+            <span class="c1"># ---------Start Byte &amp; ID---------</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">START_BYTE</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">rep</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                            <span class="s1">&#39;Skipped </span><span class="si">%d</span><span class="s1"> bytes before start found&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rep</span><span class="p">))</span>
+                        <span class="n">rep</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="c1"># packet id goes from 0-255</span>
+                    <span class="n">packet_id</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">packet_id</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># ---------Channel Data---------</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">channel_data</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eeg_channels_per_sample</span><span class="p">):</span>
+
+                    <span class="c1"># 3 byte ints</span>
+                    <span class="n">literal_read</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+                    <span class="n">unpacked</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;3B&#39;</span><span class="p">,</span> <span class="n">literal_read</span><span class="p">)</span>
+                    <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="n">log_bytes_in</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">literal_read</span><span class="p">)</span>
+
+                    <span class="c1"># 3byte int in 2s compliment</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">unpacked</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">127</span><span class="p">):</span>
+                        <span class="n">pre_fix</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;FF&#39;</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">pre_fix</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">))</span>
+
+                    <span class="n">literal_read</span> <span class="o">=</span> <span class="n">pre_fix</span> <span class="o">+</span> <span class="n">literal_read</span>
+
+                    <span class="c1"># unpack little endian(&gt;) signed integer(i)</span>
+                    <span class="c1"># (makes unpacking platform independent)</span>
+                    <span class="n">myInt</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;i&#39;</span><span class="p">,</span> <span class="n">literal_read</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling_output</span><span class="p">:</span>
+                        <span class="n">channel_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">myInt</span> <span class="o">*</span> <span class="n">scale_fac_uVolts_per_count</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">channel_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">myInt</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">2</span>
+
+            <span class="c1"># ---------Accelerometer Data---------</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">aux_data</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aux_channels_per_sample</span><span class="p">):</span>
+
+                    <span class="c1"># short = h</span>
+                    <span class="n">acc</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;h&#39;</span><span class="p">,</span> <span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="n">log_bytes_in</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling_output</span><span class="p">:</span>
+                        <span class="n">aux_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span> <span class="o">*</span> <span class="n">scale_fac_accel_G_per_count</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">aux_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="c1"># ---------End Byte---------</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="n">log_bytes_in</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># read next packet</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">==</span> <span class="n">END_BYTE</span><span class="p">):</span>
+                    <span class="n">sample</span> <span class="o">=</span> <span class="n">OpenBCISample</span><span class="p">(</span><span class="n">packet_id</span><span class="p">,</span> <span class="n">channel_data</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">return</span> <span class="n">sample</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ID:&lt;</span><span class="si">%d</span><span class="s2">&gt; &lt;Unexpected END_BYTE found &lt;</span><span class="si">%s</span><span class="s2">&gt; instead of &lt;</span><span class="si">%s</span><span class="s2">&gt;&quot;</span>
+                              <span class="o">%</span> <span class="p">(</span><span class="n">packet_id</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">END_BYTE</span><span class="p">))</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_bytes_in</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  </span>
+<span class="sd">    Clean Up (atexit)</span>
+<span class="sd">  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OpenBCICyton.stop"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stopping streaming...</span><span class="se">\n</span><span class="s2">Wait for buffer to flush...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;sent &lt;s&gt;: stopped streaming&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.disconnect"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">isOpen</span><span class="p">()):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Closing Serial...&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;serial closed&#39;</span><span class="p">)</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  </span>
+<span class="sd">        SETTINGS AND HELPERS</span>
+<span class="sd">  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OpenBCICyton.warn"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.warn">[docs]</a>    <span class="k">def</span> <span class="nf">warn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+            <span class="c1"># log how many packets where sent succesfully in between warnings</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Data packets received:&#39;</span> <span class="o">+</span>
+                             <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">text</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.print_incoming_text"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.print_incoming_text">[docs]</a>    <span class="k">def</span> <span class="nf">print_incoming_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        When starting the connection, print all the debug data until</span>
+<span class="sd">        we get to a line with the end sequence &#39;$$$&#39;.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># Wait for device to send data</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">inWaiting</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="c1"># Look for end sequence $$$</span>
+            <span class="k">while</span> <span class="s1">&#39;$$$&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="c1"># we&#39;re supposed to get UTF8 text, but the board might behave otherwise</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+                                           <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">+=</span> <span class="n">c</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No Message&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.openbci_id"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.openbci_id">[docs]</a>    <span class="k">def</span> <span class="nf">openbci_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serial</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        When automatically detecting port, parse the serial return for the &quot;OpenBCI&quot; ID.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># Wait for device to send data</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">serial</span><span class="o">.</span><span class="n">inWaiting</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="c1"># Look for end sequence $$$</span>
+            <span class="k">while</span> <span class="s1">&#39;$$$&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="c1"># we&#39;re supposed to get UTF8 text, but the board might behave otherwise</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+                                         <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">+=</span> <span class="n">c</span>
+            <span class="k">if</span> <span class="s2">&quot;OpenBCI&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.print_register_settings"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.print_register_settings">[docs]</a>    <span class="k">def</span> <span class="nf">print_register_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span></div>
+
+    <span class="c1"># DEBBUGING: Prints individual incoming bytes</span>
+<div class="viewcode-block" id="OpenBCICyton.print_bytes_in"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.print_bytes_in">[docs]</a>    <span class="k">def</span> <span class="nf">print_bytes_in</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="sd">&#39;&#39;&#39;Incoming Packet Structure:</span>
+<span class="sd">          Start Byte(1)|Sample ID(1)|Channel Data(24)|Aux Data(6)|End Byte(1)</span>
+<span class="sd">          0xA0|0-255|8, 3-byte signed ints|3 2-byte signed ints|0xC0&#39;&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.print_packets_in"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.print_packets_in">[docs]</a>    <span class="k">def</span> <span class="nf">print_packets_in</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">START_BYTE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attempt_reconnect</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">skipped_str</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;SKIPPED</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">skipped_str</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">SKIPPED&#39;</span><span class="p">)</span>
+                    <span class="n">skipped_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+                <span class="n">packet_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">packet_str</span> <span class="o">=</span> <span class="n">packet_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span>
+
+                <span class="c1"># data channels</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">b</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">packet_str</span> <span class="o">=</span> <span class="n">packet_str</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+                <span class="n">b</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">packet_str</span> <span class="o">=</span> <span class="n">packet_str</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span>
+
+                <span class="c1"># aux channels</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">b</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">packet_str</span> <span class="o">=</span> <span class="n">packet_str</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+                <span class="n">b</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">packet_str</span> <span class="o">=</span> <span class="n">packet_str</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span>
+
+                <span class="c1"># end byte</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="c1"># Valid Packet</span>
+                <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">END_BYTE</span><span class="p">:</span>
+                    <span class="n">packet_str</span> <span class="o">=</span> <span class="n">packet_str</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|VAL&#39;</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">packet_str</span><span class="p">)</span>
+                    <span class="c1"># logging.debug(packet_str)</span>
+
+                <span class="c1"># Invalid Packet</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">packet_str</span> <span class="o">=</span> <span class="n">packet_str</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|INV&#39;</span>
+                    <span class="c1"># Reset</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">attempt_reconnect</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">END_BYTE</span><span class="p">:</span>
+                    <span class="n">skipped_str</span> <span class="o">=</span> <span class="n">skipped_str</span> <span class="o">+</span> <span class="s1">&#39;|END|&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">skipped_str</span> <span class="o">=</span> <span class="n">skipped_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_reconnect</span> <span class="ow">and</span> \
+                    <span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_reconnect</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">reconnect_freq</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_reconnect</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Reconnecting&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reconnect</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.check_connection"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.check_connection">[docs]</a>    <span class="k">def</span> <span class="nf">check_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_packets_to_skip</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="c1"># stop checking when we&#39;re no longer streaming</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># check number of dropped packages and establish connection problem if too large</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">&gt;</span> <span class="n">max_packets_to_skip</span><span class="p">:</span>
+            <span class="c1"># if error, attempt to reconnect</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reconnect</span><span class="p">()</span>
+        <span class="c1"># check again again in 2 seconds</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_connection</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.reconnect"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.reconnect">[docs]</a>    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Reconnecting&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span></div>
+        <span class="c1"># self.attempt_reconnect = False</span>
+
+    <span class="c1"># Adds a filter at 60hz to cancel out ambient electrical noise</span>
+<div class="viewcode-block" id="OpenBCICyton.enable_filters"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.enable_filters">[docs]</a>    <span class="k">def</span> <span class="nf">enable_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtering_data</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.disable_filters"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.disable_filters">[docs]</a>    <span class="k">def</span> <span class="nf">disable_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtering_data</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.test_signal"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.test_signal">[docs]</a>    <span class="k">def</span> <span class="nf">test_signal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Enable / disable test signal &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting all pins to ground&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting all pins to Vcc&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to low frequency 1x amp signal&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to high frequency 1x amp signal&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;[&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to low frequency 2x amp signal&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to high frequency 2x amp signal&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a known test signal. Valid signals go from 0-5&quot;</span> <span class="o">%</span> <span class="n">signal</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.set_channel"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.set_channel">[docs]</a>    <span class="k">def</span> <span class="nf">set_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">toggle_position</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Enable / disable channels &quot;&quot;&quot;</span>
+        <span class="c1"># Commands to set toggle to on position</span>
+        <span class="c1"># para ativar os canais, originalmente não há retorno ao se configurar o canal</span>
+        <span class="k">if</span> <span class="n">toggle_position</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;!&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;$&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;^&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">9</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">10</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;W&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">11</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">12</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">13</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">14</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">15</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">16</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
+        <span class="c1"># Commands to set toggle to off position</span>
+        <span class="k">elif</span> <span class="n">toggle_position</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;3&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;4&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;5&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;6&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;7&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;8&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">9</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;q&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">10</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">11</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;e&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">12</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">13</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">14</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">15</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">16</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;i&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBCICyton.find_port"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.find_port">[docs]</a>    <span class="k">def</span> <span class="nf">find_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Finds the serial port names</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
+            <span class="n">ports</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;COM</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;cygwin&#39;</span><span class="p">):</span>
+            <span class="n">ports</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;/dev/ttyUSB*&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;darwin&#39;</span><span class="p">):</span>
+            <span class="n">ports</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;/dev/tty.usbserial*&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">EnvironmentError</span><span class="p">(</span><span class="s1">&#39;Error finding ports on your operating system&#39;</span><span class="p">)</span>
+        <span class="n">openbci_port</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">port</span> <span class="ow">in</span> <span class="n">ports</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">baudrate</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+                <span class="n">openbci_serial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openbci_id</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">openbci_serial</span><span class="p">:</span>
+                    <span class="n">openbci_port</span> <span class="o">=</span> <span class="n">port</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">serial</span><span class="o">.</span><span class="n">SerialException</span><span class="p">):</span>
+                <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">openbci_port</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s1">&#39;Cannot find OpenBCI port&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">openbci_port</span></div></div>
+
+
+<div class="viewcode-block" id="OpenBCISample"><a class="viewcode-back" href="../index.html#cyton.OpenBCISample">[docs]</a><span class="k">class</span> <span class="nc">OpenBCISample</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Object encapulsating a single sample from the OpenBCI board.</span>
+<span class="sd">    NB: dummy imp for plugin compatiblity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet_id</span><span class="p">,</span> <span class="n">channel_data</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">packet_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel_data</span> <span class="o">=</span> <span class="n">channel_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span> <span class="o">=</span> <span class="n">aux_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imp_data</span> <span class="o">=</span> <span class="p">[]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

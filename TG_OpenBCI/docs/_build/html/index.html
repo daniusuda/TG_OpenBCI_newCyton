@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introdução ao newCyton / Introduction to newCyton &#8212; TG_Projeto_BCI_4  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="TG_Projeto_BCI_4  documentation" href="#" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introducao-ao-newcyton-introduction-to-newcyton">
+<h1>Introdução ao newCyton / Introduction to newCyton<a class="headerlink" href="#introducao-ao-newcyton-introduction-to-newcyton" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="bem-vindo-a-documentacao-do-newcyton">
+<h2>Bem-vindo à documentação do newCyton!<a class="headerlink" href="#bem-vindo-a-documentacao-do-newcyton" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="welcome-newcyton-s-documentation">
+<h2>Welcome newCyton&#8217;s documentation!<a class="headerlink" href="#welcome-newcyton-s-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="links">
+<h3>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="teste2">
+<h3>Teste2<a class="headerlink" href="#teste2" title="Permalink to this headline">¶</a></h3>
+<p>Conteúdo:</p>
+<span class="target" id="module-newCyton"></span><p>newCyton.py
+~~~
+Novo módulo baseado no arquivo cyton.py original do projeto OpenBCI.</p>
+<dl class="class">
+<dt id="newCyton.newCyton">
+<em class="property">class </em><code class="descclassname">newCyton.</code><code class="descname">newCyton</code><span class="sig-paren">(</span><em>id=0</em>, <em>port=None</em>, <em>filter_data=True</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="newCyton.newCyton.ativar_BIAS">
+<code class="descname">ativar_BIAS</code><span class="sig-paren">(</span><em>canal</em>, <em>BIAS=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ativar_BIAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ativar_BIAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre escolher_Input 
+:param canal: este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8). 
+:param BIAS: parâmetro True para ligar, False para desligar; valor padrão é True.
+Retorna qual é o estado do BIAS e de qual canal é.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.escolher_Ganho">
+<code class="descname">escolher_Ganho</code><span class="sig-paren">(</span><em>canal</em>, <em>ganho=24</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.escolher_Ganho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.escolher_Ganho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre ligar_Canal 
+:param canal: este parâmetro determina qual canal será ligado(1 a 8). 
+:param ganho: as opções de ganho são os valores 1, 2, 3, 4, 6, 12 e 24; o valor padrão é 24.
+Retorna qual é o valor do ganho e de qual canal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.escolher_Input">
+<code class="descname">escolher_Input</code><span class="sig-paren">(</span><em>canal</em>, <em>tipo='normal'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.escolher_Input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.escolher_Input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre escolher_Input 
+:param canal: este parâmetro determina qual canal será definido o tipo de input(1 a 8). 
+:param tipo: anormal, curto, BIAS, fonte, temperatura, sinalteste, BIASpos, BIASneg; o tipo deve estar entre aspas ex:&#8217;BIASpos&#8217;.
+Retorna qual é o tipo de input e qual canal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.ligar_Canal">
+<code class="descname">ligar_Canal</code><span class="sig-paren">(</span><em>canal</em>, <em>liga=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ligar_Canal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ligar_Canal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre ligar_Canal 
+:param canal: este parâmetro determina qual canal será ligado(1 a 8). 
+:param liga: o valor padrão é 1(ligado), mas pode ser 0(desligado).
+Retorna qual é o canal que foi ligado/desligado.
+:return ret_val: result information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.readSample">
+<code class="descname">readSample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.readSample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.readSample" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is about readSample. 
+:param abra: abra number. 
+:param cadabra: cadabra number.
+:param sesame: sesame information.
+:return ret_val: result information.
+:rtype: int.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.resetStringxX">
+<code class="descname">resetStringxX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.resetStringxX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.resetStringxX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre resetStringxX 
+Função utilizada internamente para reiniciar a string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime5m">
+<code class="descname">sdTime5m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime5m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime5m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Comandos do Cartão SD (SD card Commands):
+O comando é utilizado para realizar registro por certo período de tempo das leituras feitas pela placa, fazendo data logging no cartão SD.    
+sdTime5m/15m/30m/60m/120m/240m/720m/1440m/14s &lt;=&gt; 5 min./15 min./30 min./60 min./120 min./240 min./720 min./1440 min./14 segs. de registro
+Parar o logging e fechar o arquivo SD: sdStop</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.start_streaming">
+<code class="descname">start_streaming</code><span class="sig-paren">(</span><em>callback</em>, <em>lapse=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.start_streaming"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.start_streaming" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start handling streaming data from the board. Call a provided callback
+for every single sample that is processed (every two samples with daisy module).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>callback: A callback function, or a list of functions, that will receive a single</dt>
+<dd>argument of the OpenBCISample object captured.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cyton"></span><p>Core OpenBCI object for handling connections and samples from the board.</p>
+<p>EXAMPLE USE:</p>
+<dl class="docutils">
+<dt>def handle_sample(sample):</dt>
+<dd>print(sample.channel_data)</dd>
+</dl>
+<p>c
+board = OpenBCIBoard()
+board.print_register_settings()
+board.start_streaming(handle_sample)</p>
+<dl class="docutils">
+<dt>NOTE: If daisy modules is enabled, the callback will occur every two samples, hence &#8220;packet_id&#8221;</dt>
+<dd>will only contain even numbers. As a side effect, the sampling rate will be divided by 2.</dd>
+</dl>
+<p>FIXME: at the moment we can just force daisy mode, do not check that the module is detected.
+TODO: enable impedance</p>
+<dl class="class">
+<dt id="cyton.OpenBCICyton">
+<em class="property">class </em><code class="descclassname">cyton.</code><code class="descname">OpenBCICyton</code><span class="sig-paren">(</span><em>port=None</em>, <em>baud=115200</em>, <em>filter_data=True</em>, <em>scaled_output=True</em>, <em>daisy=False</em>, <em>aux=False</em>, <em>impedance=False</em>, <em>log=True</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Handle a connection to an OpenBCI board.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>port: The port to connect to.
+baud: The baud of the serial connection.
+daisy: Enable or disable daisy module and 16 chans readings
+aux, impedance: unused, for compatibility with ganglion API</dd>
+</dl>
+<dl class="method">
+<dt id="cyton.OpenBCICyton.check_connection">
+<code class="descname">check_connection</code><span class="sig-paren">(</span><em>interval=2</em>, <em>max_packets_to_skip=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.check_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.check_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.disable_filters">
+<code class="descname">disable_filters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.disable_filters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.disable_filters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.enable_filters">
+<code class="descname">enable_filters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.enable_filters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.enable_filters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.find_port">
+<code class="descname">find_port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.find_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.find_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.getBoardType">
+<code class="descname">getBoardType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getBoardType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getBoardType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version of the board</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.getNbAUXChannels">
+<code class="descname">getNbAUXChannels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getNbAUXChannels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getNbAUXChannels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.getNbEEGChannels">
+<code class="descname">getNbEEGChannels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getNbEEGChannels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getNbEEGChannels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.getNbImpChannels">
+<code class="descname">getNbImpChannels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getNbImpChannels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getNbImpChannels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.getSampleRate">
+<code class="descname">getSampleRate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getSampleRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getSampleRate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.openbci_id">
+<code class="descname">openbci_id</code><span class="sig-paren">(</span><em>serial</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.openbci_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.openbci_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>When automatically detecting port, parse the serial return for the &#8220;OpenBCI&#8221; ID.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.print_bytes_in">
+<code class="descname">print_bytes_in</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_bytes_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_bytes_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.print_incoming_text">
+<code class="descname">print_incoming_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_incoming_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_incoming_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>When starting the connection, print all the debug data until
+we get to a line with the end sequence &#8216;$$$&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.print_packets_in">
+<code class="descname">print_packets_in</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_packets_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_packets_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.print_register_settings">
+<code class="descname">print_register_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_register_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_register_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.reconnect">
+<code class="descname">reconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.reconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.reconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.ser_inWaiting">
+<code class="descname">ser_inWaiting</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.ser_inWaiting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.ser_inWaiting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access serial port object for inWaiting</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.ser_read">
+<code class="descname">ser_read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.ser_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.ser_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access serial port object for read</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.ser_write">
+<code class="descname">ser_write</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.ser_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.ser_write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access serial port object for write</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.setImpedance">
+<code class="descname">setImpedance</code><span class="sig-paren">(</span><em>flag</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.setImpedance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.setImpedance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable/disable impedance measure. Not implemented at the moment on Cyton.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.set_channel">
+<code class="descname">set_channel</code><span class="sig-paren">(</span><em>channel</em>, <em>toggle_position</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.set_channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.set_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable / disable channels</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.start_streaming">
+<code class="descname">start_streaming</code><span class="sig-paren">(</span><em>callback</em>, <em>lapse=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.start_streaming"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.start_streaming" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start handling streaming data from the board. Call a provided callback
+for every single sample that is processed (every two samples with daisy module).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>callback: A callback function, or a list of functions, that will receive a single</dt>
+<dd>argument of the OpenBCISample object captured.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.test_signal">
+<code class="descname">test_signal</code><span class="sig-paren">(</span><em>signal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.test_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.test_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable / disable test signal</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cyton.OpenBCICyton.warn">
+<code class="descname">warn</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.warn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.warn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cyton.OpenBCISample">
+<em class="property">class </em><code class="descclassname">cyton.</code><code class="descname">OpenBCISample</code><span class="sig-paren">(</span><em>packet_id</em>, <em>channel_data</em>, <em>aux_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCISample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCISample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Object encapulsating a single sample from the OpenBCI board.
+NB: dummy imp for plugin compatiblity</p>
+</dd></dl>
+
+<span class="target" id="module-usaCyton"></span><div class="section" id="usacyton-py">
+<h4>usaCyton.py<a class="headerlink" href="#usacyton-py" title="Permalink to this headline">¶</a></h4>
+<p>Módulo final, com interface para controle da placa.</p>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="indices-and-tables">
+<h4>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introdução ao newCyton / Introduction to newCyton</a><ul>
+<li><a class="reference internal" href="#bem-vindo-a-documentacao-do-newcyton">Bem-vindo à documentação do newCyton!</a></li>
+<li><a class="reference internal" href="#welcome-newcyton-s-documentation">Welcome newCyton&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#links">Links</a></li>
+<li><a class="reference internal" href="#teste2">Teste2</a><ul>
+<li><a class="reference internal" href="#usacyton-py">usaCyton.py</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
