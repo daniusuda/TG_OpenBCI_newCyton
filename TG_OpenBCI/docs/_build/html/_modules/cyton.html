@@ -8,7 +8,7 @@
     
     <title>cyton &#8212; TG_Projeto_BCI_4  documentation</title>
     
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,15 +26,22 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="TG_Projeto_BCI_4  documentation" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" />
-   
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body role="document">
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TG_Projeto_BCI_4  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -83,7 +90,7 @@
     <span class="nb">float</span><span class="p">((</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">ADS1299_gain</span> <span class="o">*</span> <span class="mf">1000000.</span>
 <span class="n">scale_fac_accel_G_per_count</span> <span class="o">=</span> <span class="mf">0.002</span> <span class="o">/</span> \
     <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  <span class="c1"># assume set to +/4G, so 2 mG</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Importado cyton.py&#39;</span><span class="p">)</span>
+<span class="c1">#print(&#39;Importado cyton.py&#39;)</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">#Commands for in SDK http://docs.openbci.com/software/01-Open BCI_SDK:</span>
@@ -171,9 +178,9 @@
         <span class="sd">&quot;&quot;&quot; Returns the version of the board &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_type</span></div>
 
-<div class="viewcode-block" id="OpenBCICyton.setImpedance"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.setImpedance">[docs]</a>    <span class="k">def</span> <span class="nf">setImpedance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Enable/disable impedance measure. Not implemented at the moment on Cyton. &quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
+<span class="c1">#    def setImpedance(self, flag):</span>
+<span class="c1">#        &quot;&quot;&quot; Enable/disable impedance measure. Not implemented at the moment on Cyton. &quot;&quot;&quot;</span>
+<span class="c1">#        return</span>
 
 <div class="viewcode-block" id="OpenBCICyton.ser_write"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.ser_write">[docs]</a>    <span class="k">def</span> <span class="nf">ser_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Access serial port object for write&quot;&quot;&quot;</span>
@@ -188,11 +195,7 @@
         <span class="sd">&quot;&quot;&quot;Access serial port object for inWaiting&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">inWaiting</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="OpenBCICyton.getSampleRate"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.getSampleRate">[docs]</a>    <span class="k">def</span> <span class="nf">getSampleRate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SAMPLE_RATE</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SAMPLE_RATE</span></div>
+ 
 
 <div class="viewcode-block" id="OpenBCICyton.getNbEEGChannels"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.getNbEEGChannels">[docs]</a>    <span class="k">def</span> <span class="nf">getNbEEGChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
@@ -506,10 +509,10 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">END_BYTE</span><span class="p">:</span>
-                    <span class="n">skipped_str</span> <span class="o">=</span> <span class="n">skipped_str</span> <span class="o">+</span> <span class="s1">&#39;|END|&#39;</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">skipped_str</span> <span class="o">=</span> <span class="n">skipped_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span>
+<span class="c1">#                if b == END_BYTE:</span>
+<span class="c1">#                    skipped_str = skipped_str + &#39;|END|&#39;</span>
+<span class="c1">#                else:</span>
+<span class="c1">#                    skipped_str = skipped_str + &quot;%03d&quot; % (b) + &#39;.&#39;</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_reconnect</span> <span class="ow">and</span> \
                     <span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_reconnect</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">reconnect_freq</span><span class="p">:</span>
@@ -540,109 +543,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span></div>
         <span class="c1"># self.attempt_reconnect = False</span>
 
-    <span class="c1"># Adds a filter at 60hz to cancel out ambient electrical noise</span>
-<div class="viewcode-block" id="OpenBCICyton.enable_filters"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.enable_filters">[docs]</a>    <span class="k">def</span> <span class="nf">enable_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filtering_data</span> <span class="o">=</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="OpenBCICyton.disable_filters"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.disable_filters">[docs]</a>    <span class="k">def</span> <span class="nf">disable_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filtering_data</span> <span class="o">=</span> <span class="kc">False</span></div>
-
-<div class="viewcode-block" id="OpenBCICyton.test_signal"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.test_signal">[docs]</a>    <span class="k">def</span> <span class="nf">test_signal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Enable / disable test signal &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting all pins to ground&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting all pins to Vcc&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to low frequency 1x amp signal&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to high frequency 1x amp signal&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;[&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to low frequency 2x amp signal&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Connecting pins to high frequency 2x amp signal&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a known test signal. Valid signals go from 0-5&quot;</span> <span class="o">%</span> <span class="n">signal</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="OpenBCICyton.set_channel"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.set_channel">[docs]</a>    <span class="k">def</span> <span class="nf">set_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">toggle_position</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Enable / disable channels &quot;&quot;&quot;</span>
-        <span class="c1"># Commands to set toggle to on position</span>
-        <span class="c1"># para ativar os canais, originalmente não há retorno ao se configurar o canal</span>
-        <span class="k">if</span> <span class="n">toggle_position</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;!&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">4</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;$&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">5</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">6</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;^&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">7</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">8</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">9</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">10</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;W&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">11</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">12</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">13</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">14</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">15</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">16</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
-        <span class="c1"># Commands to set toggle to off position</span>
-        <span class="k">elif</span> <span class="n">toggle_position</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;3&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">4</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;4&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">5</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;5&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">6</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;6&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">7</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;7&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">8</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;8&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">9</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;q&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">10</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">11</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;e&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">12</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">13</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">14</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">15</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="mi">16</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;i&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OpenBCICyton.find_port"><a class="viewcode-back" href="../index.html#cyton.OpenBCICyton.find_port">[docs]</a>    <span class="k">def</span> <span class="nf">find_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Finds the serial port names</span>
@@ -687,15 +587,7 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
+        <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -710,17 +602,22 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, Author.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
-      
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TG_Projeto_BCI_4  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
   </body>
 </html>

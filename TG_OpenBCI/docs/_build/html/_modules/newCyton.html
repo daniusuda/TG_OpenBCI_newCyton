@@ -8,7 +8,7 @@
     
     <title>newCyton &#8212; TG_Projeto_BCI_4  documentation</title>
     
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,15 +26,22 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="TG_Projeto_BCI_4  documentation" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" />
-   
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body role="document">
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TG_Projeto_BCI_4  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -44,7 +51,8 @@
   <h1>Source code for newCyton</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">newCyton.py</span>
-<span class="sd">~~~</span>
+<span class="sd">===========</span>
+
 <span class="sd">Novo módulo baseado no arquivo cyton.py original do projeto OpenBCI.</span>
 <span class="sd"> </span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -53,7 +61,6 @@
 <span class="kn">import</span> <span class="nn">serial</span>
 <span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="c1">#import matplotlib.pyplot as plt</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">timeit</span>
 <span class="kn">import</span> <span class="nn">atexit</span>
@@ -69,7 +76,7 @@
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenBCI Cyton&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;***OpenBCI newCyton***&quot;</span><span class="p">)</span>
 
 <span class="c1">#------------------------------------------------------------------------------   </span>
 <span class="c1">#sample rate de 250 SPS é fixo para placa Cyton com dongle</span>
@@ -120,12 +127,15 @@
 <span class="c1">#        sstringxX = [&#39;x&#39;, 0, 0, 0 , 0, 0, 0, 0, &#39;X&#39;]</span>
 <span class="c1">#        stringJoin = &#39;x0000000X&#39;</span>
 <span class="c1">#        n = 0</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;myCytonSerial established...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Conexão serial estabelecida...&quot;</span><span class="p">)</span>
 
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
         <span class="c1"># Initialize 32-bit board, doesn&#39;t affect 8bit board</span>
         <span class="c1">#realiza soft reset</span>
         <span class="c1">#mostra</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Soft Reset da placa&quot;</span><span class="p">)</span>
+
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1">#colocando a sequência abaixo ele vai comendo caracteres</span>
@@ -136,10 +146,10 @@
 <span class="c1">#        </span>
 <span class="c1">#        time.sleep(1)</span>
 <span class="c1">#        self.warn(&#39;teste_de_warn&#39;)      </span>
-<span class="c1">#        </span>
+<span class="c1">#        time.sleep(0.5)</span>
 <span class="c1">#        self.ser.write(b&#39;x1000000X&#39;)</span>
 <span class="c1">#        self.print_incoming_text()</span>
-<span class="c1">#        taime.sleep(0.5)</span>
+<span class="c1">#        time.sleep(0.5)</span>
 <span class="c1">#        self.ser.write(b&#39;x2000000X&#39;)</span>
 <span class="c1">#        self.print_incoming_text()</span>
 <span class="c1">#        time.sleep(0.5)</span>
@@ -165,14 +175,17 @@
 <span class="c1">#        self.ser.write(b&#39;?&#39;)</span>
         
         <span class="c1">#self.print_incoming_text()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fim da configuração de canais&#39;</span><span class="p">)</span>
+        <span class="c1">#time.sleep(1.0)</span>
+        <span class="c1">#print(&#39;Fim da configuração de canais&#39;)</span>
         <span class="c1">#self.ser.write(b&#39;?&#39;)</span>
         <span class="c1">#self.print_incoming_text()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Serial write ? mostra as configurações&quot;</span><span class="p">)</span>
+        <span class="c1">#print(&quot;Serial write ? mostra as configurações&quot;)</span>
         <span class="c1">#self.print_incoming_text()</span>
                 <span class="c1"># wait for device to be ready</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#time.sleep(1)</span>
+                
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IDs do ADS1299 e do LIS3DH, versão do Firmware:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        
         <span class="k">if</span> <span class="n">port</span> <span class="o">!=</span> <span class="s2">&quot;loop://&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
 
@@ -204,29 +217,9 @@
         
         <span class="c1">#Initialize check connection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_connection</span><span class="p">()</span>
-     
-<div class="viewcode-block" id="newCyton.readSample"><a class="viewcode-back" href="../index.html#newCyton.newCyton.readSample">[docs]</a>    <span class="k">def</span> <span class="nf">readSample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This is about readSample. </span>
-<span class="sd">        :param abra: abra number. </span>
-<span class="sd">        :param cadabra: cadabra number.</span>
-<span class="sd">        :param sesame: sesame information.</span>
-<span class="sd">        :return ret_val: result information.</span>
-<span class="sd">        :rtype: int.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># read current sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">streamStart</span><span class="p">()</span>
-        <span class="c1">#time.sleep(1)</span>
-        <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_serial_binary</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">sample</span><span class="o">.</span><span class="n">channel_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="mf">0.0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">channel_data</span>
-        <span class="c1">#self.print_incoming_text()</span>
-<span class="c1">#        time.sleep(5)</span>
-<span class="c1">#        self.myStopStreaming()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span></div>
+
     
-    <span class="k">def</span> <span class="nf">print_bytes_in</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">printBytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span>
@@ -243,8 +236,9 @@
 <span class="c1">#       Esta função é utilizada em outras para reiniciar a string que é enviada para a placa após certos comandos</span>
 <div class="viewcode-block" id="newCyton.resetStringxX"><a class="viewcode-back" href="../index.html#newCyton.newCyton.resetStringxX">[docs]</a>    <span class="k">def</span> <span class="nf">resetStringxX</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Sobre resetStringxX </span>
-<span class="sd">        Função utilizada internamente para reiniciar a string.</span>
+<span class="sd">        Sobre resetStringxX</span>
+<span class="sd">        </span>
+<span class="sd">        Função utilizada internamente para reiniciar a stringde envio em serial.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">global</span> <span class="n">stringxX</span>
@@ -255,8 +249,12 @@
 <span class="c1">#       laço que torna todos os elementos da lista em string</span>
 <span class="c1">#       sem a conversão não é possível utilizar o .join que é aplicável somente a strings</span>
 <span class="c1">#       o .join torna, por exemplo, [&#39;x&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;,&#39;X&#39;] em x0000000X</span>
-    <span class="k">def</span> <span class="nf">transforma_String</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        
+<div class="viewcode-block" id="newCyton.transforma_String"><a class="viewcode-back" href="../index.html#newCyton.newCyton.transforma_String">[docs]</a>    <span class="k">def</span> <span class="nf">transforma_String</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre transforma_String</span>
+<span class="sd">        </span>
+<span class="sd">        Função utilizada internamente para realizar as transformações necessárias do vetor [&#39;x&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;, &#39;0&#39;,&#39;X&#39;] das funções que o utilizam, para que possa ser enviado em serial</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#for i in range(0, 7):</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="k">global</span> <span class="n">stringJoin</span>
@@ -273,56 +271,86 @@
         <span class="n">stringSer</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">stringJoin</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">stringSer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">stringSer</span><span class="p">)</span>
+        
+<span class="c1">#        if self.ser.inWaiting():</span>
+<span class="c1">#            c = self.ser.read()</span>
+<span class="c1">#            print(c)</span>
+        <span class="c1">#self.print_incoming_text()</span>
         <span class="c1">#time.sleep(1)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resetStringxX</span><span class="p">()</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="newCyton.transforma_StringMaster"><a class="viewcode-back" href="../index.html#newCyton.newCyton.transforma_StringMaster">[docs]</a>    <span class="k">def</span> <span class="nf">transforma_StringMaster</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre transforma_StringMaster</span>
+<span class="sd">        </span>
+<span class="sd">        Função para converter e enviar por serial todas as alterações acumuladas conforme são utilizados os comandos que modifiquem a string do tipo x0000000X.</span>
+<span class="sd">        </span>
+<span class="sd">        É recomendado o uso desta função se for realizar combinações de diversas alterações dos canais, para garantir as alterações, sem que sejam sobrescritas.</span>
+<span class="sd">        </span>
+<span class="sd">        Portanto, deve ser usado após usar as funções/combinações das funções: ligar_Canal; escolher_Ganho; escolher_Input ; ativar_BIAS ; ativar_SRB2 ; ativar_SRB1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">global</span> <span class="n">stringxXMaster</span>
+        <span class="k">global</span> <span class="n">stringJoin</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">):</span>
+            <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">stringxXMaster</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">stringJoin</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stringxXMaster</span><span class="p">)</span>
+        <span class="n">stringSer</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">stringJoin</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">stringSer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">stringSer</span><span class="p">)</span>
+        <span class="c1">#self.print_incoming_text()</span>
+        
+        <span class="k">return</span></div>
 
 <span class="c1">#       A função ligar_Canal aceita valores em &quot;canal&quot; de 1 a 8, dos 8 canais da placa Cyton; para os valores de ligado ou desligado</span>
  <span class="c1">#       Para liga = 1 o canal está ligado, liga = 0 está desligado</span>
 <div class="viewcode-block" id="newCyton.ligar_Canal"><a class="viewcode-back" href="../index.html#newCyton.newCyton.ligar_Canal">[docs]</a>    <span class="k">def</span> <span class="nf">ligar_Canal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canal</span><span class="p">,</span> <span class="n">liga</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Sobre ligar_Canal </span>
+<span class="sd">        Sobre ligar_Canal</span>
+<span class="sd">        </span>
 <span class="sd">        :param canal: este parâmetro determina qual canal será ligado(1 a 8). </span>
 <span class="sd">        :param liga: o valor padrão é 1(ligado), mas pode ser 0(desligado).</span>
+<span class="sd">        </span>
 <span class="sd">        Retorna qual é o canal que foi ligado/desligado.</span>
-<span class="sd">        :return ret_val: result information.    </span>
+<span class="sd">         </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+        <span class="k">global</span> <span class="n">stringxXMaster</span>
         <span class="k">global</span> <span class="n">stringJoin</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
+        
         <span class="k">if</span><span class="p">(</span><span class="n">liga</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">stringxX</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span><span class="p">(</span><span class="n">liga</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
             <span class="n">stringxX</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            
         <span class="bp">self</span><span class="o">.</span><span class="n">transforma_String</span><span class="p">()</span>
-<span class="c1">#        self.print_incoming_text()</span>
-<span class="c1">#        print(&#39;passo1&#39;)</span>
-<span class="c1">#        time.sleep(2)</span>
-<span class="c1">#        print(&#39;passo2&#39;)</span>
-<span class="c1">#        self.print_incoming_text()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Canal configurado&#39;</span><span class="p">,</span> <span class="n">canal</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">stringJoin</span><span class="p">)</span>
-       <span class="c1"># print(&#39;passo3&#39;)</span>
-        <span class="c1">#time.sleep(2)</span>
-       <span class="c1"># self.print_incoming_text()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resetStringxX</span><span class="p">()</span>
+
         <span class="k">return</span></div>
     
 <span class="c1">#       Os canais são de 1-8; as opções de ganho são os valores 1, 2, 3, 4, 6, 12 e 24</span>
 <span class="c1">#       O ganho padrão é de 24</span>
 <div class="viewcode-block" id="newCyton.escolher_Ganho"><a class="viewcode-back" href="../index.html#newCyton.newCyton.escolher_Ganho">[docs]</a>    <span class="k">def</span> <span class="nf">escolher_Ganho</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canal</span><span class="p">,</span> <span class="n">ganho</span><span class="o">=</span><span class="mi">24</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Sobre ligar_Canal </span>
+<span class="sd">        Sobre ligar_Canal</span>
+<span class="sd">        </span>
 <span class="sd">        :param canal: este parâmetro determina qual canal será ligado(1 a 8). </span>
 <span class="sd">        :param ganho: as opções de ganho são os valores 1, 2, 3, 4, 6, 12 e 24; o valor padrão é 24.</span>
-<span class="sd">        Retorna qual é o valor do ganho e de qual canal.</span>
+<span class="sd">        </span>
+<span class="sd">        Imprime qual é o valor do ganho e de qual canal.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="n">gain</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">24</span><span class="p">]</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">gain</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">ganho</span><span class="p">)</span>
+        <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">gain</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">ganho</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">transforma_String</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ganho de&#39;</span><span class="p">,</span> <span class="n">ganho</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="n">canal</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
@@ -333,18 +361,21 @@
 <span class="c1">#       Escreva o tipo entre aspas &#39;&#39;</span>
 <div class="viewcode-block" id="newCyton.escolher_Input"><a class="viewcode-back" href="../index.html#newCyton.newCyton.escolher_Input">[docs]</a>    <span class="k">def</span> <span class="nf">escolher_Input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canal</span><span class="p">,</span> <span class="n">tipo</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Sobre escolher_Input </span>
+<span class="sd">        Sobre escolher_Input</span>
+<span class="sd">        </span>
 <span class="sd">        :param canal: este parâmetro determina qual canal será definido o tipo de input(1 a 8). </span>
-<span class="sd">        :param tipo: anormal, curto, BIAS, fonte, temperatura, sinalteste, BIASpos, BIASneg; o tipo deve estar entre aspas ex:&#39;BIASpos&#39;.</span>
-<span class="sd">        Retorna qual é o tipo de input e qual canal.</span>
+<span class="sd">        :param tipo: normal, curto, BIAS, fonte, temperatura, sinalteste, BIASpos, BIASneg; o tipo deve estar entre aspas ex:&#39;BIASpos&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Imprime qual é o tipo de input e qual canal.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span><span class="s1">&#39;curto&#39;</span><span class="p">,</span><span class="s1">&#39;BIAS&#39;</span><span class="p">,</span><span class="s1">&#39;fonte&#39;</span><span class="p">,</span><span class="s1">&#39;temperatura&#39;</span><span class="p">,</span><span class="s1">&#39;sinalteste&#39;</span><span class="p">,</span><span class="s1">&#39;BIASpos&#39;</span><span class="p">,</span><span class="s1">&#39;BIASneg&#39;</span><span class="p">]</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tipo</span><span class="p">)</span>
+        <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tipo</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transforma_String</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tipo de input escolhido&#39;</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="n">canal</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tipo de input escolhido&#39;</span><span class="p">,</span><span class="n">tipo</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="n">canal</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resetStringxX</span><span class="p">()</span>
         <span class="k">return</span></div>
@@ -352,15 +383,18 @@
 <span class="c1">#       Determina se liga ou não o BIAS, aceita True ou False como valores de &quot;BIAS&quot;  </span>
 <div class="viewcode-block" id="newCyton.ativar_BIAS"><a class="viewcode-back" href="../index.html#newCyton.newCyton.ativar_BIAS">[docs]</a>    <span class="k">def</span> <span class="nf">ativar_BIAS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">BIAS</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Sobre escolher_Input </span>
+<span class="sd">        Sobre ativar_BIAS</span>
+<span class="sd">        </span>
 <span class="sd">        :param canal: este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8). </span>
 <span class="sd">        :param BIAS: parâmetro True para ligar, False para desligar; valor padrão é True.</span>
-<span class="sd">        Retorna qual é o estado do BIAS e de qual canal é.</span>
+<span class="sd">        </span>
+<span class="sd">        Imprime qual é o estado do BIAS e de qual canal é.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">BIAS</span><span class="p">)</span>
+        <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">BIAS</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transforma_String</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BIAS configurado&#39;</span><span class="p">,</span> <span class="n">BIAS</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="n">canal</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
@@ -368,26 +402,53 @@
         <span class="k">return</span></div>
     
 <span class="c1">#       Determina se liga ou não o SRB2, aceita True ou False como valores de &quot;SRB2&quot;    </span>
-    <span class="k">def</span> <span class="nf">ativar_SRB2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">SRB2</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.ativar_SRB2"><a class="viewcode-back" href="../index.html#newCyton.newCyton.ativar_SRB2">[docs]</a>    <span class="k">def</span> <span class="nf">ativar_SRB2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">SRB2</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre ativar_SRB2</span>
+<span class="sd">        </span>
+<span class="sd">        Conecta a entrada positiva do canal específico ao SRB2; fecha uma chave entre a entrada P ao pino SRB2. Várias entradas podem ser conectadas a este mesmo pino.</span>
+<span class="sd">        :param canal: este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8). </span>
+<span class="sd">        :param SRB2: parâmetro True para ligar, False para desligar; valor padrão é True.</span>
+<span class="sd">        </span>
+<span class="sd">        Imprime qual é o estado do SRB2 e de qual canal é.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">SRB2</span>
+        <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">SRB2</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">transforma_String</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BIAS configurado&#39;</span><span class="p">,</span> <span class="n">SRB2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SRB2 configurado&#39;</span><span class="p">,</span> <span class="n">SRB2</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resetStringxX</span><span class="p">()</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
     
 <span class="c1">#       Determina se liga ou não o SRB1, aceita True ou False como valores de &quot;SRB1&quot;    </span>
-    <span class="k">def</span> <span class="nf">ativar_SRB1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">SRB1</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.ativar_SRB1"><a class="viewcode-back" href="../index.html#newCyton.newCyton.ativar_SRB1">[docs]</a>    <span class="k">def</span> <span class="nf">ativar_SRB1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">SRB1</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre ativar_SRB1</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        SRB1 conecta todas as entradas negativas dos canais ao SRB1. Isto desconecta os canais negativos ao ADC(os canais  1-8 de conversão analógico-digitais)</span>
+<span class="sd">        </span>
+<span class="sd">        Apesar da opção estar disponível em todos os canais, a conexão força todos os canais negativos a serem conectados.</span>
+<span class="sd">        :param canal: este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8). </span>
+<span class="sd">        :param SRB1: parâmetro True para ligar, False para desligar; valor padrão é True.</span>
+<span class="sd">        </span>
+<span class="sd">        Imprime qual é o estado do SRB1 e de qual canal é.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">SRB1</span>
+        <span class="n">stringxXMaster</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">SRB1</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">transforma_String</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BIAS configurado&#39;</span><span class="p">,</span> <span class="n">SRB1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SRB2 configurado&#39;</span><span class="p">,</span> <span class="n">SRB1</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resetStringxX</span><span class="p">()</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
     
 <span class="c1">#       stringxX pode ser alterado manualmente com o comando abaixo, mas necessita da conversões abaixo:</span>
 <span class="c1">#       &quot;canal&quot; aceita valores de 1 a 8, para selecionar os canais</span>
@@ -397,21 +458,48 @@
 <span class="c1">#       &quot;bias&quot; aceita valores de 0 ou 1, 0 significa bias ligado, 1 bias desligado</span>
 <span class="c1">#       &quot;srb2&quot; aceita valores de 0 ou 1, 0 significa srb2 ligado, 1 srb2 desligado</span>
 <span class="c1">#       &quot;srb1&quot; aceita valores de 0 ou 1, 0 significa srb1 ligado, 1 srb1 desligado</span>
-<span class="c1">#       Configuração de Canais (Channel Setting Commands): x (CHANNEL, POWER_DOWN, GAIN_SET, INPUT_TYPE_SET, BIAS_SET, SRB2_SET, SRB1_SET) X </span>
-    <span class="k">def</span> <span class="nf">configCanal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">liga</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ganho</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bias</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">srb2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">srb1</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="c1">#       Configuração de Canais (Channel Setting Commands): x (CHANNEL, POWER_DOWN, GAIN_SET, INPUT_TYPE_SET, BIAS_SET, SRB2_SET, SRB1_SET) X</span>
+
+<div class="viewcode-block" id="newCyton.configCanal"><a class="viewcode-back" href="../index.html#newCyton.newCyton.configCanal">[docs]</a>    <span class="k">def</span> <span class="nf">configCanal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">liga</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">ganho</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">tipo</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span><span class="n">BIAS</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">SRB2</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">SRB1</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre configCanal</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função pode ser utilizada ao invés das funções anteriores, para configurar múltiplos parâmetros de um canal de uma vez.</span>
+<span class="sd">        </span>
+<span class="sd">        :param canal: este parâmetro determina qual é o canal a ser alterado.</span>
+<span class="sd">        :param liga: parâmetro ligado(liga = 1) ou desligado(liga = 0); valor padrão é ligado.</span>
+<span class="sd">        :param ganho: parâmetro do ganho, valores 1/2/3/4/6/12/24; valor padrão é 24.</span>
+<span class="sd">        :param tipo: parâmetro de input, tipos: &#39;normal&#39;,&#39;curto&#39;,&#39;BIAS&#39;,&#39;fonte&#39;,&#39;temperatura&#39;,&#39;sinalteste&#39;,&#39;BIASpos&#39;,&#39;BIASneg&#39;; valor padrão é &#39;normal&#39;.</span>
+<span class="sd">        :param bias: parâmetro do bias; True para ligar, False para desligar; valor padrão é True.</span>
+<span class="sd">        :param srb2: parâmetro  do srb2; True para ligar, False para desligar; valor padrão é True.</span>
+<span class="sd">        :param srb1: parâmetro do srb1; True para ligar, False para desligar; valor padrão é True.</span>
+<span class="sd">        </span>
+<span class="sd">        Imprime qual é o estado do SRB1 e de qual canal é.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">global</span> <span class="n">stringxX</span>
         <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
-        <span class="n">stringxX</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">liga</span>
-        <span class="n">stringxX</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ganho</span>
-        <span class="n">stringxX</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">inp</span>
-        <span class="n">stringxX</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">bias</span>
-        <span class="n">stringxX</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">srb2</span>
-        <span class="n">stringxX</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">srb1</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">liga</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">stringxX</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>    
+        <span class="k">if</span><span class="p">(</span><span class="n">liga</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">stringxX</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                
+        <span class="n">gain</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">24</span><span class="p">]</span>
+        <span class="n">stringxX</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">gain</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">ganho</span><span class="p">)</span>
+        
+        <span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span><span class="s1">&#39;curto&#39;</span><span class="p">,</span><span class="s1">&#39;BIAS&#39;</span><span class="p">,</span><span class="s1">&#39;fonte&#39;</span><span class="p">,</span><span class="s1">&#39;temperatura&#39;</span><span class="p">,</span><span class="s1">&#39;sinalteste&#39;</span><span class="p">,</span><span class="s1">&#39;BIASpos&#39;</span><span class="p">,</span><span class="s1">&#39;BIASneg&#39;</span><span class="p">]</span>
+        <span class="n">stringxX</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">canal</span>
+        <span class="n">stringxX</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tipo</span><span class="p">)</span>
+        
+        <span class="n">stringxX</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">BIAS</span><span class="p">)</span>
+        <span class="n">stringxX</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">SRB2</span><span class="p">)</span>
+        <span class="n">stringxX</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">SRB1</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">transforma_String</span><span class="p">()</span>
-        <span class="c1">##self.print_incoming_text()</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">resetStringxX</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Canal Configurado&#39;</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">liga</span><span class="p">,</span><span class="n">ganho</span><span class="p">,</span><span class="n">inp</span><span class="p">,</span><span class="n">bias</span><span class="p">,</span><span class="n">srb2</span><span class="p">,</span><span class="n">srb1</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Canal Configurado&#39;</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">liga</span><span class="p">,</span><span class="n">ganho</span><span class="p">,</span><span class="n">tipo</span><span class="p">,</span><span class="n">BIAS</span><span class="p">,</span><span class="n">SRB2</span><span class="p">,</span><span class="n">SRB1</span><span class="p">)</span>
+        <span class="k">return</span></div>
 
     <span class="c1">#Comandos Firmware 1.0.0</span>
     
@@ -421,61 +509,125 @@
         <span class="c1">#Sinais de Teste (Test Signal Control Commands): 0 - = p [ ]</span>
         <span class="c1">#Liga todos os canais, e os conecta ao teste de sinal interno, útil para calibração e teste dos canais, para checar o funcionamento destes</span>
         <span class="c1">#São dos tipos ground; sinal com 1x amplitude (devagar ou veloz); sinal corrente contínua; sinal com 2x de amplitude (devagar ou veloz)</span>
-    <span class="k">def</span> <span class="nf">testGND</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="newCyton.testGND"><a class="viewcode-back" href="../index.html#newCyton.newCyton.testGND">[docs]</a>    <span class="k">def</span> <span class="nf">testGND</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre testGND</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função gera um sinal ground/terra para todos os 8 canais, pode ser utilizado para teste.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0&#39;</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste GND&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">test1xAmpSlow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.test1xAmpSlow"><a class="viewcode-back" href="../index.html#newCyton.newCyton.test1xAmpSlow">[docs]</a>    <span class="k">def</span> <span class="nf">test1xAmpSlow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre test1xAmpSlow</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função gera um sinal de onda quadrada lento, com ganho 1, para todos canais.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
-        <span class="c1">#self.print_incoming_text()</span>
+        
+<span class="c1">#            self.print_incoming_text()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste ganho 1, devagar&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">test1xAmpFast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.test1xAmpFast"><a class="viewcode-back" href="../index.html#newCyton.newCyton.test1xAmpFast">[docs]</a>    <span class="k">def</span> <span class="nf">test1xAmpFast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre test1xAmpSlow</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função gera um sinal de onda quadrada rápido, com ganho 1, para todos canais.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
         
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste ganho 1, rápido&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">testDC</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.testDC"><a class="viewcode-back" href="../index.html#newCyton.newCyton.testDC">[docs]</a>    <span class="k">def</span> <span class="nf">testDC</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre testDC</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função gera um sinal CC, contínuo, para todos canais.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
         
         <span class="c1">#self.print_incoming_text</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste CC&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">test2xAmpSlow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.test2xAmpSlow"><a class="viewcode-back" href="../index.html#newCyton.newCyton.test2xAmpSlow">[docs]</a>    <span class="k">def</span> <span class="nf">test2xAmpSlow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sobre test2xAmpSlow</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função gera um sinal de onda quadrada lento, com ganho 2, para todos canais.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;[&#39;</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste ganho 1, devagar&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">test2xAmpFast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste ganho 2, devagar&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.test2xAmpFast"><a class="viewcode-back" href="../index.html#newCyton.newCyton.test2xAmpFast">[docs]</a>    <span class="k">def</span> <span class="nf">test2xAmpFast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Sobre test2xAmpFast</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função gera um sinal de onda quadrada lento, com ganho 2, para todos canais.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste ganho 1, rápido&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sinal de teste ganho 2, rápido&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
          
         <span class="c1">#Configuração de Canal Padrão(Default Channel Settings): d</span>
         <span class="c1">#Altera as configurações de canais para o padrão</span>
         <span class="c1">#Relatório de Configuração Padrão: D</span>
         <span class="c1">#Gera um relatório sobre o status da configuração padrão</span>
-    <span class="k">def</span> <span class="nf">padrao</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.padrao"><a class="viewcode-back" href="../index.html#newCyton.newCyton.padrao">[docs]</a>    <span class="k">def</span> <span class="nf">padrao</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Sobre padrao</span>
+<span class="sd">        </span>
+<span class="sd">        Esta função envia em serial para todos os canais, e os modificam para a configurações padrão; canal ligado, ganho de 24, tipo de input &#39;normal&#39;,BIAS, SRB2 e SRB1 com valores de True.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Configurações padrões&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">padraoRelatorio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.padraoRelatorio"><a class="viewcode-back" href="../index.html#newCyton.newCyton.padraoRelatorio">[docs]</a>    <span class="k">def</span> <span class="nf">padraoRelatorio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Sobre padraoRelatorio</span>
+<span class="sd">        </span>
+<span class="sd">        É recebido um relatório sobre as configurações padrão.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Relatório padronizado&#39;</span><span class="p">)</span>
-        <span class="c1">#self.print_incoming_text()</span>
-        <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
+        <span class="k">return</span></div>
     
         <span class="c1">#Impedância do Canal (LeadOff Impedance Commands): z (CHANNEL, PCHAN, NCHAN) Z</span>
         <span class="c1">#O comando enviado é similar à configuração de canais, z e Z são start e end bits respectivamente</span>
         <span class="c1">#Canal configura o canal específico, aceita valores de 1 a 8, pchan e nchan aceitam valores de 0 e 1, 0 não é aplicado o sinal de teste, 1 é aplicado</span>
         <span class="c1">#O comando é utilizado para se determinar se a impedância nos polos dos canais está correta, envia um sinal de AC de 31.5Hz</span>
         <span class="c1">#Espera-se que o canal seja atenuado, caso esteja adequada a conexão, sem atenuação do sinal pode indicar uma má conexão</span>
-    <span class="k">def</span> <span class="nf">zDoCh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">pchan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nchan</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.zDoCh"><a class="viewcode-back" href="../index.html#newCyton.newCyton.zDoCh">[docs]</a>    <span class="k">def</span> <span class="nf">zDoCh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">pchan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nchan</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Sobre zDoCh</span>
+<span class="sd">        </span>
+<span class="sd">        O comando enviado é similar à configuração de canais, z e Z são start e end bits respectivamente.</span>
+<span class="sd">        É enviado um sinal CA de 31.5Hz nos polos dos canais, para checar se a impedância está correta.</span>
+<span class="sd">        Se o canal for atenuado, confirma impedância adequada, sem a atenuação pode indicar má conexão.</span>
+<span class="sd">        </span>
+<span class="sd">        :param canal: este parâmetro configura o canal específico, aceita valores de 1 a 8 correspondente aos canais.</span>
+<span class="sd">                :param pchan: parâmetro aceita 0 ou 1 como valores, com 0 não é aplicada a impedância na entrada positiva do canal, com 1 é aplicado.</span>
+<span class="sd">        :param nchan: parâmetro aceita 0 ou 1 como valores, com 0 não é aplicada a impedância na entrada negativa do canal, com 1 é aplicado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">stringZ</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">,</span><span class="n">canal</span><span class="p">,</span><span class="n">pchan</span><span class="p">,</span><span class="n">nchan</span><span class="p">,</span><span class="s1">&#39;Z&#39;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
             <span class="n">stringZ</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">stringZ</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -485,7 +637,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Teste de impedância&#39;</span><span class="p">)</span>
         <span class="c1">#self.print_incoming_text()</span>
         <span class="n">stringZ</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;Z&#39;</span><span class="p">]</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
         
         <span class="c1">#Comandos do Cartão SD (SD card Commands):</span>
         <span class="c1">#O comando é utilizado para realizar registro por certo período de tempo das leituras feitas pela placa</span>
@@ -495,243 +647,176 @@
         <span class="c1">#Parar o logging e fechar o arquivo SD: j</span>
 <div class="viewcode-block" id="newCyton.sdTime5m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime5m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime5m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Sobre sdTime5m</span>
+<span class="sd">        </span>
+<span class="sd">        O arquivo de texto gerado tem nome inicial: OBCI_01.txt, com incrementos conforme são gravados outros arquivos.</span>
+<span class="sd">        Os dados obtidos pela aquisição têm o formato: Número da amostra / 8 valores dos canais / 3 valores dos acelerômetros</span>
+<span class="sd">        Os dados estão em hexadecimal.</span>
+<span class="sd">        </span>
 <span class="sd">        Comandos do Cartão SD (SD card Commands):</span>
-<span class="sd">        O comando é utilizado para realizar registro por certo período de tempo das leituras feitas pela placa, fazendo data logging no cartão SD.    </span>
+<span class="sd">        </span>
+<span class="sd">        O comando é utilizado para realizar registro a cada certo período de tempo das leituras feitas pela placa, fazendo data logging no cartão SD.    </span>
 <span class="sd">        sdTime5m/15m/30m/60m/120m/240m/720m/1440m/14s &lt;=&gt; 5 min./15 min./30 min./60 min./120 min./240 min./720 min./1440 min./14 segs. de registro</span>
-<span class="sd">        Parar o logging e fechar o arquivo SD: sdStop</span>
+<span class="sd">        Isso significa que será realizada a impressão dos dados a cada intervalo, por exemplo, de 14 em 14 segundos é feito um registro no arquivo de texto.</span>
+<span class="sd">        </span>
+<span class="sd">        Para parar o logging e fechar o arquivo SD: sdStop; a função deve ser utilizada se quiser interromper o logging.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 5 minutos&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD até 5 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
         <span class="k">return</span></div>
-    <span class="k">def</span> <span class="nf">sdTime15m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 15 minutos&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="newCyton.sdTime15m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime15m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime15m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sdTime15m</span>
+<span class="sd">        </span>
+<span class="sd">        Logging no cartão SD até 15 minutos.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD até 15 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdTime30m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 30 minutos&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdTime30m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime30m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime30m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sdTime30m</span>
+<span class="sd">        </span>
+<span class="sd">        Logging no cartão SD até 30 minutos.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD até 30 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdTime60m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 60 minutos&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdTime60m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime60m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime60m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Sobre sdTime60m</span>
+<span class="sd">        </span>
+<span class="sd">        Logging no cartão SD até 60 minutos.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD até 60 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;G&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdTime120m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 120 minutos&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdTime120m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime120m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime120m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Sobre sdTime120m</span>
+<span class="sd">        </span>
+<span class="sd">        Logging no cartão SD até 120 minutos.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD até 120 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;H&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdTime240m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdTime240m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime240m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime240m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        Sobre sdTime240m</span>
+<span class="sd">        </span>
+<span class="sd">        Logging no cartão SD até 240 minutos.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 240 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdTime720m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 720 minutos&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdTime720m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime720m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime720m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sdTime720m</span>
+<span class="sd">        </span>
+<span class="sd">        Logging no cartão SD até 720 minutos.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD por 720 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;K&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdTime1440m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 1440 minutos&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdTime1440m"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime1440m">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime1440m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sdTime1440m</span>
+<span class="sd">        </span>
+<span class="sd">         Logging no cartão SD até 1440 minutos. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD até 1440 minutos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdTime14s</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD 14 segundos&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdTime14s"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdTime14s">[docs]</a>    <span class="k">def</span> <span class="nf">sdTime14s</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sobre sdTime14s</span>
+<span class="sd">        </span>
+<span class="sd">         Logging no cartão SD até 14 segundos.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Registro no cartão SD até 14 segundos&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sdStop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sdStop"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sdStop">[docs]</a>    <span class="k">def</span> <span class="nf">sdStop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sdTime14s</span>
+
+<span class="sd">        sdStop interrompe o logging.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;j&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fim do registro no cartão SD&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Comando para finalização da aquisição no cartão SD&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
     
         <span class="c1">#Comandos de Stream de Dados (Stream Data Commands): </span>
         <span class="c1">#b :começa o streaming de dados</span>
         <span class="c1">#s :interrompe o streaming de dados</span>
     
-    <span class="k">def</span> <span class="nf">streamStart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">ident</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">aaux_data</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">imp_data</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_serial_binary</span><span class="p">()</span>
-<span class="c1">#            ident = packet_id</span>
-<span class="c1">#            data = channel_data</span>
-<span class="c1">#            aaaux_data = aux_data</span>
-<span class="c1">#            imp_data = []</span>
-<span class="c1">#            print(sample)</span>
-<span class="c1">#            print(ident)</span>
-<span class="c1">#            print(data)</span>
-<span class="c1">#            print(aaaux_data)</span>
-<span class="c1">#            print(imp_data)</span>
-        <span class="k">return</span>
-    
-<div class="viewcode-block" id="newCyton.start_streaming"><a class="viewcode-back" href="../index.html#newCyton.newCyton.start_streaming">[docs]</a>    <span class="k">def</span> <span class="nf">start_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">lapse</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start handling streaming data from the board. Call a provided callback</span>
-<span class="sd">        for every single sample that is processed (every two samples with daisy module).</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">          callback: A callback function, or a list of functions, that will receive a single</span>
-<span class="sd">           argument of the OpenBCISample object captured.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="n">start_time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
-
-        <span class="c1"># Enclose callback funtion in a list if it comes alone</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">callback</span> <span class="o">=</span> <span class="p">[</span><span class="n">callback</span><span class="p">]</span>
-
-        <span class="c1"># Initialize check connection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_connection</span><span class="p">()</span>
-
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
-
-            <span class="c1"># read current sample</span>
-            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_serial_binary</span><span class="p">()</span>
-            <span class="c1"># if a daisy module is attached, wait to concatenate two samples</span>
-            <span class="c1"># (main board + daisy) before passing it to callback</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daisy</span><span class="p">:</span>
-                <span class="c1"># odd sample: daisy sample, save for later</span>
-                <span class="k">if</span> <span class="o">~</span><span class="n">sample</span><span class="o">.</span><span class="n">id</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span> <span class="o">=</span> <span class="n">sample</span>
-                <span class="c1"># even sample: concatenate and send if last sample was the fist part,</span>
-                <span class="c1">#  otherwise drop the packet</span>
-                <span class="k">elif</span> <span class="n">sample</span><span class="o">.</span><span class="n">id</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-                    <span class="c1"># the aux data will be the average between the two samples, as the channel</span>
-                    <span class="c1">#  samples themselves have been averaged by the board</span>
-                    <span class="n">avg_aux_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">aux_data</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span><span class="o">.</span><span class="n">aux_data</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                    <span class="n">whole_sample</span> <span class="o">=</span> <span class="n">OpenBCISample</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                                                 <span class="n">sample</span><span class="o">.</span><span class="n">channel_data</span> <span class="o">+</span>
-                                                 <span class="bp">self</span><span class="o">.</span><span class="n">last_odd_sample</span><span class="o">.</span><span class="n">channel_data</span><span class="p">,</span>
-                                                 <span class="n">avg_aux_data</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">callback</span><span class="p">:</span>
-                        <span class="n">call</span><span class="p">(</span><span class="n">whole_sample</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">callback</span><span class="p">:</span>
-                    <span class="n">call</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">lapse</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lapse</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_packet_count</span> <span class="o">+</span> <span class="mi">1</span></div>
-    
-    <span class="k">def</span> <span class="nf">read_serial_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_bytes_to_skip</span><span class="o">=</span><span class="mi">3000</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-            <span class="n">bb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">bb</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Device appears to be stalled. Quitting...&#39;</span><span class="p">)</span>
-                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Device Stalled&#39;</span><span class="p">)</span>
-                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-                <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\xFF</span><span class="s1">&#39;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">bb</span>
-
-        <span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_bytes_to_skip</span><span class="p">):</span>
-
-            <span class="c1"># ---------Start Byte &amp; ID---------</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">b</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">START_BYTE</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">rep</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                            <span class="s1">&#39;Skipped </span><span class="si">%d</span><span class="s1"> bytes before start found&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rep</span><span class="p">))</span>
-                        <span class="n">rep</span> <span class="o">=</span> <span class="mi">0</span>
-                    <span class="c1"># packet id goes from 0-255</span>
-                    <span class="n">packet_id</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">packet_id</span><span class="p">)</span>
-
-                    <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">1</span>
-
-            <span class="c1"># ---------Channel Data---------</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">channel_data</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eeg_channels_per_sample</span><span class="p">):</span>
-
-                    <span class="c1"># 3 byte ints</span>
-                    <span class="n">literal_read</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-
-                    <span class="n">unpacked</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;3B&#39;</span><span class="p">,</span> <span class="n">literal_read</span><span class="p">)</span>
-                    <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="n">log_bytes_in</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">literal_read</span><span class="p">)</span>
-
-                    <span class="c1"># 3byte int in 2s compliment</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">unpacked</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">127</span><span class="p">):</span>
-                        <span class="n">pre_fix</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;FF&#39;</span><span class="p">))</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">pre_fix</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">))</span>
-
-                    <span class="n">literal_read</span> <span class="o">=</span> <span class="n">pre_fix</span> <span class="o">+</span> <span class="n">literal_read</span>
-
-                    <span class="c1"># unpack little endian(&gt;) signed integer(i)</span>
-                    <span class="c1"># (makes unpacking platform independent)</span>
-                    <span class="n">myInt</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;i&#39;</span><span class="p">,</span> <span class="n">literal_read</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling_output</span><span class="p">:</span>
-                        <span class="n">channel_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">myInt</span> <span class="o">*</span> <span class="n">scale_fac_uVolts_per_count</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">channel_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">myInt</span><span class="p">)</span>
-
-                <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">2</span>
-
-            <span class="c1"># ---------Accelerometer Data---------</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">aux_data</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aux_channels_per_sample</span><span class="p">):</span>
-
-                    <span class="c1"># short = h</span>
-                    <span class="n">acc</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;h&#39;</span><span class="p">,</span> <span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="n">log_bytes_in</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
-
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling_output</span><span class="p">:</span>
-                        <span class="n">aux_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span> <span class="o">*</span> <span class="n">scale_fac_accel_G_per_count</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">aux_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
-
-                <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">3</span>
-            <span class="c1"># ---------End Byte---------</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">log_bytes_in</span> <span class="o">=</span> <span class="n">log_bytes_in</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">read_state</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># read next packet</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">==</span> <span class="n">END_BYTE</span><span class="p">):</span>
-                    <span class="n">sample</span> <span class="o">=</span> <span class="n">OpenBCISample</span><span class="p">(</span><span class="n">packet_id</span><span class="p">,</span> <span class="n">channel_data</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">=</span> <span class="mi">0</span>
-                    <span class="k">return</span> <span class="n">sample</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ID:&lt;</span><span class="si">%d</span><span class="s2">&gt; &lt;Unexpected END_BYTE found &lt;</span><span class="si">%s</span><span class="s2">&gt; instead of &lt;</span><span class="si">%s</span><span class="s2">&gt;&quot;</span>
-                              <span class="o">%</span> <span class="p">(</span><span class="n">packet_id</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">END_BYTE</span><span class="p">))</span>
-                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_bytes_in</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">packets_dropped</span> <span class="o">+</span> <span class="mi">1</span>
-            
-    <span class="k">def</span> <span class="nf">streamStop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finalizando o streaming&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+<span class="c1">#    def streamStart(self):</span>
+<span class="c1">#        ident = 1</span>
+<span class="c1">#        data = 1</span>
+<span class="c1">#        aaux_data = 1</span>
+<span class="c1">#        imp_data = 1</span>
+<span class="c1">#        self.ser.write(b&#39;b&#39;)</span>
+<span class="c1">#        self.streaming = True</span>
+<span class="c1">#        t = 1</span>
+<span class="c1">#        while True:</span>
+<span class="c1">#            sample = self._read_serial_binary()</span>
+<span class="c1">##            ident = packet_id</span>
+<span class="c1">##            data = channel_data</span>
+<span class="c1">##            aaaux_data = aux_data</span>
+<span class="c1">##            imp_data = []</span>
+<span class="c1">##            print(sample)</span>
+<span class="c1">##            print(ident)</span>
+<span class="c1">##            print(data)</span>
+<span class="c1">##            print(aaaux_data)</span>
+<span class="c1">##            print(imp_data)</span>
+<span class="c1">#        return</span>
+<span class="c1">#    </span>
+<span class="c1">#   </span>
+<span class="c1">#            </span>
+<span class="c1">#    def streamStop(self):</span>
+<span class="c1">#        self.ser.write(b&#39;s&#39;)</span>
+<span class="c1">#        print(&#39;Finalizando o streaming&#39;)</span>
+<span class="c1">#        return</span>
     
         <span class="c1">#Comandos Sortidos:</span>
         <span class="c1">#? :lê e gera um relatório sobre todas as configurações do ADS1299 e o LIS3DH</span>
         <span class="c1">#ADS1299 é um conversor AD especializado para medidas de biopotencial</span>
         <span class="c1">#LIS3DH é um acelerômetro linear de três eixos</span>
-    <span class="k">def</span> <span class="nf">adslisRelatorio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        
+<div class="viewcode-block" id="newCyton.adslisRelatorio"><a class="viewcode-back" href="../index.html#newCyton.newCyton.adslisRelatorio">[docs]</a>    <span class="k">def</span> <span class="nf">adslisRelatorio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre adslisRelatorio</span>
+
+<span class="sd">        É gerado relatório similar ao presente no __init__ do newCyton.py, com as configurações do ADS1299 e LIS3DH.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Relatório das configurações atuais&#39;</span><span class="p">)</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="c1">#        </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
         
-        <span class="k">return</span> 
+        <span class="k">return</span> </div>
         <span class="c1">#v :&quot;soft reset&quot; da placa Cyton</span>
-    <span class="k">def</span> <span class="nf">softReset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.softReset"><a class="viewcode-back" href="../index.html#newCyton.newCyton.softReset">[docs]</a>    <span class="k">def</span> <span class="nf">softReset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre softReset</span>
+
+<span class="sd">        A placa realiza um soft reset, reinicializando o streaming e as configurações modificadas antes do reset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Soft reset da placa&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
     
     <span class="c1">#Comandos Daisy/16 Canais</span>
         <span class="c1">#Desligar Canais (Turn Channels OFF):</span>
@@ -739,49 +824,94 @@
         <span class="c1">#Ligar Canais (Turn Channels ON):</span>
         <span class="c1">#Q W E R T Y U I :ligam respectivamente os canais de 9 a 16, na ordem</span>
         <span class="c1"># As funções aceitam valores de 9 a 16</span>
-    <span class="k">def</span> <span class="nf">daisyChOff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canal</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.daisyChOff"><a class="viewcode-back" href="../index.html#newCyton.newCyton.daisyChOff">[docs]</a>    <span class="k">def</span> <span class="nf">daisyChOff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canal</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre daisyChOff</span>
+
+<span class="sd">        :param canal: O canal daisy correspondente aos comandos &#39;q&#39;,&#39;w&#39;,&#39;e&#39;,&#39;r&#39;,&#39;t&#39;,&#39;y&#39;,&#39;u&#39;,&#39;i&#39; &lt;=&gt; canais 9,10,11,12,13,14,15,16, é desligado.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">daisyOff</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;q&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;t&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;u&#39;</span><span class="p">,</span><span class="s1">&#39;i&#39;</span><span class="p">]</span>
         <span class="n">canalOff</span> <span class="o">=</span> <span class="n">daisyOff</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span>
         <span class="n">serialOff</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">canalOff</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">serialOff</span><span class="p">)</span>  
         <span class="c1">#self.print_incoming_text()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Desligando canal da Daisy:&#39;</span><span class="p">,</span> <span class="n">canal</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
         
-    <span class="k">def</span> <span class="nf">daisyChOn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.daisyChOn"><a class="viewcode-back" href="../index.html#newCyton.newCyton.daisyChOn">[docs]</a>    <span class="k">def</span> <span class="nf">daisyChOn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">canal</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre daisyChOn</span>
+
+<span class="sd">        :param canal: O canal daisy correspondente aos comandos &#39;Q&#39;,&#39;W&#39;,&#39;E&#39;,&#39;R&#39;,&#39;T&#39;,&#39;Y&#39;,&#39;U&#39;,&#39;I&#39; &lt;=&gt; canais 9,10,11,12,13,14,15,16, é ligado.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">daisyOn</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Q&#39;</span><span class="p">,</span><span class="s1">&#39;W&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="s1">&#39;R&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;I&#39;</span><span class="p">]</span>
         <span class="n">canalOn</span> <span class="o">=</span> <span class="n">daisyOn</span><span class="p">[</span><span class="n">canal</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span>
         <span class="n">serialOn</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">canalOn</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">serialOn</span><span class="p">)</span>  
         <span class="c1">#self.print_incoming_text()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ligando canal da Daisy:&#39;</span><span class="p">,</span> <span class="n">canal</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
             
         <span class="c1">#Número de Canais(Select maximum channel number):</span>
         <span class="c1">#c :Habilita somente os canais 1 a 8</span>
         <span class="c1">#C :Habilita todos os canais de 1 a 16</span>
-    <span class="k">def</span> <span class="nf">maxCh8</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.maxCh8"><a class="viewcode-back" href="../index.html#newCyton.newCyton.maxCh8">[docs]</a>    <span class="k">def</span> <span class="nf">maxCh8</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre maxCh8</span>
+
+<span class="sd">        O comando força o uso dos 8 canais originais da Cyton, impede a conexão da Cyton e a placa Daisy.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Limite de canais de 1 a 8&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">maxCh16</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="newCyton.maxCh16"><a class="viewcode-back" href="../index.html#newCyton.newCyton.maxCh16">[docs]</a>    <span class="k">def</span> <span class="nf">maxCh16</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre maxCh16</span>
+
+<span class="sd">        O comando permite o uso dos 16 canais, somando os canais da Daisy aos originais da Cyton.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Limite de canais de 1 a 16&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
     
     <span class="c1">#Comandos Firmware 2.0.0</span>
         <span class="c1"># Marcação do Tempo (Time Stamping):</span>
         <span class="c1">#&lt; :Inicia o time stamping, sincronizando o Driver e o Host.</span>
         <span class="c1">#&gt; :Para o time stamping.</span>
-    <span class="k">def</span> <span class="nf">timeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&lt;&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Início do Time Stamping&#39;</span><span class="p">)</span>
         
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">timeStop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.timeStamp"><a class="viewcode-back" href="../index.html#newCyton.newCyton.timeStamp">[docs]</a>    <span class="k">def</span> <span class="nf">timeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre timeStamp</span>
+
+<span class="sd">        Inicia o time stamping dos dados.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&lt;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tempo de Início do Time Stamping&#39;</span><span class="p">)</span>
+        
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.timeStop"><a class="viewcode-back" href="../index.html#newCyton.newCyton.timeStop">[docs]</a>    <span class="k">def</span> <span class="nf">timeStop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre timeStop</span>
+
+<span class="sd">        Desliga o time stamping dos dados.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fim do Time Stamping&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
             
         <span class="c1">#Número de Rádio do Canal (Get Radio Channel Number):</span>
         <span class="c1">#0xF0 0x00: retorna a falha ou sucesso, e o valor do host, mais o do aparelho no caso de sucesso.</span>
@@ -790,31 +920,68 @@
         <span class="c1">#O 0x07 é opcional, para determinar o canal, de 1 a 25 em HEX. De 0x01 a 0x19</span>
         <span class="c1">#Configurar Sobreposição do Canal de Rádio (Set Host Radio Channel Override):</span>
         <span class="c1">#0xF0 0x02 0x01: retorna falha ou sucesso, força a troca de canal do Host para o canal(opcional). De 0x01 a 0x19</span>
-    <span class="k">def</span> <span class="nf">radioGet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.radioGet"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radioGet">[docs]</a>    <span class="k">def</span> <span class="nf">radioGet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radioGet</span>
+
+<span class="sd">        O comando tenta realizar conexão de rádio, retornando sucesso ou falha.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0xF0 0x00&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
           
-    <span class="k">def</span> <span class="nf">radioSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">radSet</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.radioSet"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radioSet">[docs]</a>    <span class="k">def</span> <span class="nf">radioSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">radSet</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radioSet</span>
+
+<span class="sd">        Retorna a falha ou sucesso, sucesso se o host e o aparelho estiverem com o mesmo valor; também retorna em HEX o valor do canal.</span>
+<span class="sd">        O 0x07 é opcional, para determinar o canal, de 1 a 25 em HEX. De 0x01 a 0x19</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">radioSet</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;0x01&#39;</span><span class="p">,</span><span class="n">radSet</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">radioSet</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
             
-    <span class="k">def</span> <span class="nf">radioOver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.radioOver"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radioOver">[docs]</a>    <span class="k">def</span> <span class="nf">radioOver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radioOver</span>
+
+<span class="sd">        Retorna falha ou sucesso, força a troca de canal do Host para o canal(opcional); de 0x01 a 0x19.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
         <span class="n">radioOver</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;0x02&#39;</span><span class="p">,</span><span class="n">radOver</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">radioOver</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
             
         <span class="c1">#Obter Poll Time de Rádio(Radio Get Poll Time):</span>
         <span class="c1">#0xF0 0x03: retorno de pool time, pode significar erros e está associado com as capacidades do sistema. Retornado em HEX o poll time.</span>
         <span class="c1">#Configurar Poll Time de Rádio(Radio Get Poll Time):</span>
         <span class="c1">#0xF0 0x04 0x40:a terceira opção determina o poll time em HEX, são aceitos valores de 0 a 255, em ms. Padrão é de 80ms.</span>
-    <span class="k">def</span> <span class="nf">radioPoll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.radioPoll"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radioPoll">[docs]</a>    <span class="k">def</span> <span class="nf">radioPoll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radioPoll</span>
+
+<span class="sd">        Retorna o pool time, pode significar erros e está associado com as capacidades do sistema. Retornado em HEX o poll time.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0xF0 0x03&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">radioPollSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pollSet</span><span class="o">=</span><span class="mi">80</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.radioPollSet"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radioPollSet">[docs]</a>    <span class="k">def</span> <span class="nf">radioPollSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pollSet</span><span class="o">=</span><span class="mi">80</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radioSet</span>
+<span class="sd">        </span>
+<span class="sd">        A terceira opção determina o poll time em HEX, são aceitos valores de 0 a 255, em ms. Padrão é de 80ms.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">radioPoll</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;0x04&#39;</span><span class="p">,</span><span class="n">pollSet</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">radioPoll</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
                              
         <span class="c1">#Configurar o Baud Rate para o Padrão do Rádio do Host (Radio Set HOST to Driver Baud Rate to Default):</span>
         <span class="c1">#0xF0 0x05: configura o Baud Rate para 115200Hz.</span>
@@ -822,149 +989,326 @@
         <span class="c1">#0xF0 0x06: configura o Baud Rate pra 230400Hz.</span>
         <span class="c1">#Configurar o Baud Rate para Modo de Hiperalta-Velocidade (Radio Set HOST to Driver Baud Rate to Hyper-Speed mode):</span>
         <span class="c1">#0xF0 0x0A: configura o Baud Rate pra 921600Hz.</span>
-    <span class="k">def</span> <span class="nf">radio1152kHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.radio115kHz"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radio115kHz">[docs]</a>    <span class="k">def</span> <span class="nf">radio115kHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radio115kHz</span>
+<span class="sd">        </span>
+<span class="sd">        Configura o Baud Rate para 115200Hz do sistema de rádio.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0xF0 0x05&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">radio2304kHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.radio230kHz"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radio230kHz">[docs]</a>    <span class="k">def</span> <span class="nf">radio230kHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radio230kHz</span>
+<span class="sd">        </span>
+<span class="sd">        Configura o Baud Rate para 230400Hz do sistema de rádio.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0xF0 0x06&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">radio9216kHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.radio921kHz"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radio921kHz">[docs]</a>    <span class="k">def</span> <span class="nf">radio921kHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radio921kHz</span>
+<span class="sd">        </span>
+<span class="sd">        Configura o Baud Rate para 921600Hz do sistema de rádio.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0xF0 0x0A&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
         
         <span class="c1">#Relatório do Sistema de Rádio:</span>
         <span class="c1">#0xF0 0x07: checa o status do sistema de rádio, confirma ou nega se está operante.</span>
-    <span class="k">def</span> <span class="nf">radioRelat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.radioRelat"><a class="viewcode-back" href="../index.html#newCyton.newCyton.radioRelat">[docs]</a>    <span class="k">def</span> <span class="nf">radioRelat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre radio921kHz</span>
+<span class="sd">        </span>
+<span class="sd">        Checa o status do sistema de rádio, confirma ou nega se está operante.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0xF0 0x07&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
     
     <span class="c1">#Comandos Firmware 3.0.0</span>
         
         <span class="c1">#Taxa de Aquisição (Sample Rate):</span>
         <span class="c1">#~0 : configura a taxa de aquisição, o 0 no comando pode ser alterado para os valores 0/1/2/3/4/5/6/~</span>
         <span class="c1">#Os valores correspondem às taxas: 16000Hz / 8000Hz / 4000Hz / 2000Hz / 1000Hz / 500Hz / 250Hz / Obter a taxa de aquisição atual</span>
-    <span class="k">def</span> <span class="nf">sample16k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.sample16k"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sample16k">[docs]</a>    <span class="k">def</span> <span class="nf">sample16k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sample16k</span>
+
+<span class="sd">        Esta função modifica a taxa de aquisição para 16000Hz; sobre as funções &#39;sample&#39; que alteram as taxas de aquisição, estas não foram testadas por indisponibilidade do hardware.</span>
+<span class="sd">        </span>
+<span class="sd">        A transferência de dados através do USB Dongle tem a taxa de aquisição é restrita a 250Hz. Para realmente poder utilizar as diferentes taxas de aquisição deve ser utilizado  o hardware WiFi Shield.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~0&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate: 16000Hz&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sample8k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sample8k"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sample8k">[docs]</a>    <span class="k">def</span> <span class="nf">sample8k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sample8k</span>
+
+<span class="sd">        Esta função modifica a taxa de aquisição para 8000Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~1&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate: 8000Hz&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sample4k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sample4k"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sample4k">[docs]</a>    <span class="k">def</span> <span class="nf">sample4k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sample4k</span>
+
+<span class="sd">        Esta função modifica a taxa de aquisição para 4000Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~2&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate: 4000Hz&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sample2k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sample2k"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sample2k">[docs]</a>    <span class="k">def</span> <span class="nf">sample2k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sample2k</span>
+
+<span class="sd">        Esta função modifica a taxa de aquisição para 2000Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~3&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate: 2000Hz&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sample1k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sample1k"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sample1k">[docs]</a>    <span class="k">def</span> <span class="nf">sample1k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sample2k</span>
+
+<span class="sd">        Esta função modifica a taxa de aquisição para 1000Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~4&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate: 1000Hz&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sample500</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sample500"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sample500">[docs]</a>    <span class="k">def</span> <span class="nf">sample500</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sample500</span>
+
+<span class="sd">        Esta função modifica a taxa de aquisição para 500Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~5&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate: 500Hz&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sample250</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sample250"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sample250">[docs]</a>    <span class="k">def</span> <span class="nf">sample250</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sample250</span>
+
+<span class="sd">        Esta função modifica a taxa de aquisição para 250Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~6&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate: 250Hz&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">sampleStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.sampleStatus"><a class="viewcode-back" href="../index.html#newCyton.newCyton.sampleStatus">[docs]</a>    <span class="k">def</span> <span class="nf">sampleStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre sampleStatus</span>
+
+<span class="sd">        Esta função retorna a taxa de aquisição configurada.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;~~&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample Rate Atual&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
+        <span class="k">return</span></div>
         
         <span class="c1">#Modo da Placa (Board Mode):</span>
         <span class="c1">#/0 : configura o modo da placa, o 0 no comando pode ser alterado para os valores 0/1/2/3/4//</span>
         <span class="c1">#Os valores correspondem as modos: Padrão / Modo Debug / Modo Analógico / Modo Digital / Modo Marcador / Obter o modo de aquisição atual</span>
-    <span class="k">def</span> <span class="nf">boardModeDef</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.boardModeDef"><a class="viewcode-back" href="../index.html#newCyton.newCyton.boardModeDef">[docs]</a>    <span class="k">def</span> <span class="nf">boardModeDef</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre boardModeDef</span>
+
+<span class="sd">        Esta função determina o modo da placa Cyton para modo padrão (default); isto é, mandar os dados do acelerômetro nos bytes auxiliares do arquivo.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;/0&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modo: Padrão&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">boardModeDebug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.boardModeDebug"><a class="viewcode-back" href="../index.html#newCyton.newCyton.boardModeDebug">[docs]</a>    <span class="k">def</span> <span class="nf">boardModeDebug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre boardModeDebug</span>
+
+<span class="sd">        Esta função determina o modo da placa Cyton para modo de debug. Envia sinais pela saída de seria, para</span>
+<span class="sd">        ser utilizado para debug.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;/1&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modo: Debug&#39;</span><span class="p">)</span>
         
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">boardModeAnalog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.boardModeAnalog"><a class="viewcode-back" href="../index.html#newCyton.newCyton.boardModeAnalog">[docs]</a>    <span class="k">def</span> <span class="nf">boardModeAnalog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre boardModeAnalog</span>
+
+<span class="sd">        Esta função determina o modo da placa Cyton para modo analógico.</span>
+<span class="sd">        Realiza leitura dos pinos analógicos A5 e A6; se não estiver disponível o Wifi Shield,</span>
+<span class="sd">        lê também o pino A7.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;/2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modo: Analógico&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">boardModeDigital</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.boardModeDigital"><a class="viewcode-back" href="../index.html#newCyton.newCyton.boardModeDigital">[docs]</a>    <span class="k">def</span> <span class="nf">boardModeDigital</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre boardModeDigital</span>
+
+<span class="sd">        Esta função determina o modo da placa Cyton para modo digital.</span>
+<span class="sd">        Realiza leitura dos pinos analógicos D11,D12 e D17; se não estiver disponível o Wifi Shield,</span>
+<span class="sd">        lê também os pinos D13 e D18.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;/3&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modo: Digital&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">boardModeMarker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.boardModeMarker"><a class="viewcode-back" href="../index.html#newCyton.newCyton.boardModeMarker">[docs]</a>    <span class="k">def</span> <span class="nf">boardModeMarker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre boardModeMarker</span>
+
+<span class="sd">        Esta função determina o modo da placa Cyton para modo marcador.</span>
+<span class="sd">        Desliga o acelerômetro e posiciona marcadores no stream de dados, enviando &quot;_x_&quot; onde</span>
+<span class="sd">         x é</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;/4&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modo: Marcador&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">def</span> <span class="nf">boardModeStatus</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;/X&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modo Atual&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="k">return</span></div>
+<div class="viewcode-block" id="newCyton.boardModeStatus"><a class="viewcode-back" href="../index.html#newCyton.newCyton.boardModeStatus">[docs]</a>    <span class="k">def</span> <span class="nf">boardModeStatus</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre boardModeStatus</span>
+
+<span class="sd">        Esta função determina o modo da placa Cyton para retornar o modo em que a placa está.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         
-    <span class="k">def</span> <span class="nf">startText</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;//&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modo Atual&#39;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+    
         
         <span class="c1">#Comandos do Shield de Wifi (Wifi Shield Commands):</span>
         <span class="c1">#{ : Faz uma tentativa de se sincronizar com shield de Wifi, retorna o sucesso ou falha.</span>
         <span class="c1">#} : Tenta remover o shield de Wifi, retorna sucesso ou falha da operação.</span>
         <span class="c1">#: : Obtém o status do shield de Wifi, se está presente ou não.</span>
-    <span class="k">def</span> <span class="nf">WifiShieldSync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tentativa de sincronização de Wifi&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="newCyton.WifiShieldSync"><a class="viewcode-back" href="../index.html#newCyton.newCyton.WifiShieldSync">[docs]</a>    <span class="k">def</span> <span class="nf">WifiShieldSync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre WifiShieldSync</span>
+
+<span class="sd">        Esta função realiza uma tentativa de sincronização com o shield de Wifi.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tentativa de sincronização de Wifi Shield&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;{&#39;</span><span class="p">)</span>
-        
-        <span class="k">return</span> 
-    <span class="k">def</span> <span class="nf">WifiShieldDesync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tentativa de desincronização de Wifi&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;}&#39;</span><span class="p">)</span>
-        <span class="k">return</span>                     
-    <span class="k">def</span> <span class="nf">WifiShieldStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status do Wifi&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;:&#39;</span><span class="p">)</span> 
-        <span class="k">return</span>
-        
-         <span class="c1">#Obter Versão (Get Version):</span>
-         <span class="c1">#V : Retorna a versão do Firmware.</span>
-    <span class="k">def</span> <span class="nf">firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
-        <span class="c1">#time.sleep(0.5)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Versão do Firmware:&#39;</span><span class="p">)</span>
         
+        <span class="k">return</span> </div>
+<div class="viewcode-block" id="newCyton.WifiShieldDesync"><a class="viewcode-back" href="../index.html#newCyton.newCyton.WifiShieldDesync">[docs]</a>    <span class="k">def</span> <span class="nf">WifiShieldDesync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre WifiShieldDesync</span>
+
+<span class="sd">        Esta função realiza uma tentativa de desincronização com o shield de Wifi.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tentativa de desincronização de Wifi Shield&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;}&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
+        <span class="k">return</span>                     </div>
+<div class="viewcode-block" id="newCyton.WifiShieldStatus"><a class="viewcode-back" href="../index.html#newCyton.newCyton.WifiShieldStatus">[docs]</a>    <span class="k">def</span> <span class="nf">WifiShieldStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre WifiShieldStatus</span>
+
+<span class="sd">        Esta função retorna a o status do Wifi Shield, se está presente ou não.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status do Wifi Shield&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
         <span class="k">return</span></div>
-                             
-    <span class="c1">#Adendo</span>
-        
-        <span class="c1">#Caracteres não utilizados: 9 ( ) _ o O f g h k l ‘ “ n N M , . (space)</span>
-<span class="k">class</span> <span class="nc">OpenBCISample</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="newCyton.WifiShieldReset"><a class="viewcode-back" href="../index.html#newCyton.newCyton.WifiShieldReset">[docs]</a>    <span class="k">def</span> <span class="nf">WifiShieldReset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre WifiShieldReset</span>
+
+<span class="sd">        Esta função reinicia o Wifi Shield.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resetando WiFi Shield&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_incoming_text</span><span class="p">()</span>
+        <span class="k">return</span></div>
     
+<div class="viewcode-block" id="newCyton.ativaFiltro60Hz"><a class="viewcode-back" href="../index.html#newCyton.newCyton.ativaFiltro60Hz">[docs]</a>    <span class="k">def</span> <span class="nf">ativaFiltro60Hz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet_id</span><span class="p">,</span> <span class="n">channel_data</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">packet_id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">channel_data</span> <span class="o">=</span> <span class="n">channel_data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span> <span class="o">=</span> <span class="n">aux_data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">imp_data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="sd">        Sobre ativaFiltro60Hz</span>
 
-     
+<span class="sd">        Esta função ativa o filtro interno da placa, de 60Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtering_data</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="newCyton.desativaFiltro60Hz"><a class="viewcode-back" href="../index.html#newCyton.newCyton.desativaFiltro60Hz">[docs]</a>    <span class="k">def</span> <span class="nf">desativaFiltro60Hz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre desativaFiltro60Hz</span>
+
+<span class="sd">        Esta função desativa o filtro interno da placa, de 60Hz.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtering_data</span> <span class="o">=</span> <span class="kc">False</span></div>
+        
+<div class="viewcode-block" id="newCyton.versaoFirmware"><a class="viewcode-back" href="../index.html#newCyton.newCyton.versaoFirmware">[docs]</a>    <span class="k">def</span> <span class="nf">versaoFirmware</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Sobre versaoFirmware</span>
+
+<span class="sd">        Esta função retorna a versão do firmware.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ser</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;V&#39;</span><span class="p">)</span></div></div>
+        
+      
 </pre></div>
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
+        <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -979,17 +1323,22 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, Author.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
-      
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TG_Projeto_BCI_4  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
   </body>
 </html>

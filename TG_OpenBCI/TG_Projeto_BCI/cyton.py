@@ -39,7 +39,7 @@ scale_fac_uVolts_per_count = ADS1299_Vref / \
     float((pow(2, 23) - 1)) / ADS1299_gain * 1000000.
 scale_fac_accel_G_per_count = 0.002 / \
     (pow(2, 4))  # assume set to +/4G, so 2 mG
-print('Importado cyton.py')
+#print('Importado cyton.py')
 
 '''
 #Commands for in SDK http://docs.openbci.com/software/01-Open BCI_SDK:
@@ -127,9 +127,9 @@ class OpenBCICyton(object):
         """ Returns the version of the board """
         return self.board_type
 
-    def setImpedance(self, flag):
-        """ Enable/disable impedance measure. Not implemented at the moment on Cyton. """
-        return
+#    def setImpedance(self, flag):
+#        """ Enable/disable impedance measure. Not implemented at the moment on Cyton. """
+#        return
 
     def ser_write(self, b):
         """Access serial port object for write"""
@@ -144,11 +144,7 @@ class OpenBCICyton(object):
         """Access serial port object for inWaiting"""
         return self.ser.inWaiting()
 
-    def getSampleRate(self):
-        if self.daisy:
-            return SAMPLE_RATE / 2
-        else:
-            return SAMPLE_RATE
+ 
 
     def getNbEEGChannels(self):
         if self.daisy:
@@ -462,10 +458,10 @@ class OpenBCICyton(object):
 
             else:
                 print(b)
-                if b == END_BYTE:
-                    skipped_str = skipped_str + '|END|'
-                else:
-                    skipped_str = skipped_str + "%03d" % (b) + '.'
+#                if b == END_BYTE:
+#                    skipped_str = skipped_str + '|END|'
+#                else:
+#                    skipped_str = skipped_str + "%03d" % (b) + '.'
 
             if self.attempt_reconnect and \
                     (timeit.default_timer() - self.last_reconnect) > self.reconnect_freq:
@@ -496,109 +492,6 @@ class OpenBCICyton(object):
         self.streaming = True
         # self.attempt_reconnect = False
 
-    # Adds a filter at 60hz to cancel out ambient electrical noise
-    def enable_filters(self):
-        self.ser.write(b'f')
-        self.filtering_data = True
-
-    def disable_filters(self):
-        self.ser.write(b'g')
-        self.filtering_data = False
-
-    def test_signal(self, signal):
-        """ Enable / disable test signal """
-        if signal == 0:
-            self.ser.write(b'0')
-            self.warn("Connecting all pins to ground")
-        elif signal == 1:
-            self.ser.write(b'p')
-            self.warn("Connecting all pins to Vcc")
-        elif signal == 2:
-            self.ser.write(b'-')
-            self.warn("Connecting pins to low frequency 1x amp signal")
-        elif signal == 3:
-            self.ser.write(b'=')
-            self.warn("Connecting pins to high frequency 1x amp signal")
-        elif signal == 4:
-            self.ser.write(b'[')
-            self.warn("Connecting pins to low frequency 2x amp signal")
-        elif signal == 5:
-            self.ser.write(b']')
-            self.warn("Connecting pins to high frequency 2x amp signal")
-        else:
-            self.warn("%s is not a known test signal. Valid signals go from 0-5" % signal)
-
-    def set_channel(self, channel, toggle_position):
-        """ Enable / disable channels """
-        # Commands to set toggle to on position
-        # para ativar os canais, originalmente não há retorno ao se configurar o canal
-        if toggle_position == 1:
-            if channel is 1:
-                self.ser.write(b'!')
-            if channel is 2:
-                self.ser.write(b'@')
-            if channel is 3:
-                self.ser.write(b'#')
-            if channel is 4:
-                self.ser.write(b'$')
-            if channel is 5:
-                self.ser.write(b'%')
-            if channel is 6:
-                self.ser.write(b'^')
-            if channel is 7:
-                self.ser.write(b'&')
-            if channel is 8:
-                self.ser.write(b'*')
-            if channel is 9 and self.daisy:
-                self.ser.write(b'Q')
-            if channel is 10 and self.daisy:
-                self.ser.write(b'W')
-            if channel is 11 and self.daisy:
-                self.ser.write(b'E')
-            if channel is 12 and self.daisy:
-                self.ser.write(b'R')
-            if channel is 13 and self.daisy:
-                self.ser.write(b'T')
-            if channel is 14 and self.daisy:
-                self.ser.write(b'Y')
-            if channel is 15 and self.daisy:
-                self.ser.write(b'U')
-            if channel is 16 and self.daisy:
-                self.ser.write(b'I')
-        # Commands to set toggle to off position
-        elif toggle_position == 0:
-            if channel is 1:
-                self.ser.write(b'1')
-            if channel is 2:
-                self.ser.write(b'2')
-            if channel is 3:
-                self.ser.write(b'3')
-            if channel is 4:
-                self.ser.write(b'4')
-            if channel is 5:
-                self.ser.write(b'5')
-            if channel is 6:
-                self.ser.write(b'6')
-            if channel is 7:
-                self.ser.write(b'7')
-            if channel is 8:
-                self.ser.write(b'8')
-            if channel is 9 and self.daisy:
-                self.ser.write(b'q')
-            if channel is 10 and self.daisy:
-                self.ser.write(b'w')
-            if channel is 11 and self.daisy:
-                self.ser.write(b'e')
-            if channel is 12 and self.daisy:
-                self.ser.write(b'r')
-            if channel is 13 and self.daisy:
-                self.ser.write(b't')
-            if channel is 14 and self.daisy:
-                self.ser.write(b'y')
-            if channel is 15 and self.daisy:
-                self.ser.write(b'u')
-            if channel is 16 and self.daisy:
-                self.ser.write(b'i')
 
     def find_port(self):
         # Finds the serial port names

@@ -6,9 +6,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introdução ao newCyton / Introduction to newCyton &#8212; TG_Projeto_BCI_4  documentation</title>
+    <title>Introdução ao newCyton &#8212; TG_Projeto_BCI_4  documentation</title>
     
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,308 +25,651 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="TG_Projeto_BCI_4  documentation" href="#" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="top" title="TG_Projeto_BCI_4  documentation" href="#" /> 
   </head>
   <body role="document">
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">TG_Projeto_BCI_4  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="introducao-ao-newcyton-introduction-to-newcyton">
-<h1>Introdução ao newCyton / Introduction to newCyton<a class="headerlink" href="#introducao-ao-newcyton-introduction-to-newcyton" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="introducao-ao-newcyton">
+<h1>Introdução ao newCyton<a class="headerlink" href="#introducao-ao-newcyton" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="bem-vindo-a-documentacao-do-newcyton">
 <h2>Bem-vindo à documentação do newCyton!<a class="headerlink" href="#bem-vindo-a-documentacao-do-newcyton" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="welcome-newcyton-s-documentation">
-<h2>Welcome newCyton&#8217;s documentation!<a class="headerlink" href="#welcome-newcyton-s-documentation" title="Permalink to this headline">¶</a></h2>
+<p>Esta é a página em html gerada por código reStrutcturedText através do Sphinx, para documentação do projeto newCyton.</p>
 <div class="section" id="links">
 <h3>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h3>
+<p>OpenBCI Cyton SDK</p>
+<p>&lt;<a class="reference external" href="https://docs.openbci.com/docs/02Cyton/CytonSDK">https://docs.openbci.com/docs/02Cyton/CytonSDK</a>&gt;`_.</p>
+<p>GitHub do Projeto newCyton</p>
+<p>&lt;<a class="reference external" href="https://github.com/daniusuda/TG_OpenBCI_newCyton">https://github.com/daniusuda/TG_OpenBCI_newCyton</a>&gt;`_.</p>
+<p>Informações sobre o formato dos dados, da saída da placa.</p>
+<p>&lt;<a class="reference external" href="https://docs.openbci.com/docs/02Cyton/CytonSDCard">https://docs.openbci.com/docs/02Cyton/CytonSDCard</a>&gt;`_.</p>
+<p>Datasheet do conversor analógico-digital ADS1299</p>
+<p>&lt;<a class="reference external" href="http://www.ti.com/lit/ds/symlink/ads1299.pdf">http://www.ti.com/lit/ds/symlink/ads1299.pdf</a>&gt;`_.</p>
+<p>Datasheet do acelerômetro LIS3DH</p>
+<p>&lt;<a class="reference external" href="https://www.st.com/resource/en/datasheet/lis3dh.pdf">https://www.st.com/resource/en/datasheet/lis3dh.pdf</a>&gt;`_.</p>
 </div>
-<div class="section" id="teste2">
-<h3>Teste2<a class="headerlink" href="#teste2" title="Permalink to this headline">¶</a></h3>
-<p>Conteúdo:</p>
-<span class="target" id="module-newCyton"></span><p>newCyton.py
-~~~
-Novo módulo baseado no arquivo cyton.py original do projeto OpenBCI.</p>
+<div class="section" id="documentacao">
+<h3>Documentação<a class="headerlink" href="#documentacao" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="module-newCyton">
+<span id="conteudo-dos-arquivos"></span><h3>Conteúdo dos arquivos:<a class="headerlink" href="#module-newCyton" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="newcyton-py">
+<h4>newCyton.py<a class="headerlink" href="#newcyton-py" title="Permalink to this headline">¶</a></h4>
+<p>Novo módulo baseado no arquivo cyton.py original do projeto OpenBCI.</p>
+</div>
 <dl class="class">
 <dt id="newCyton.newCyton">
 <em class="property">class </em><code class="descclassname">newCyton.</code><code class="descname">newCyton</code><span class="sig-paren">(</span><em>id=0</em>, <em>port=None</em>, <em>filter_data=True</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
-<dt id="newCyton.newCyton.ativar_BIAS">
-<code class="descname">ativar_BIAS</code><span class="sig-paren">(</span><em>canal</em>, <em>BIAS=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ativar_BIAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ativar_BIAS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sobre escolher_Input 
-:param canal: este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8). 
-:param BIAS: parâmetro True para ligar, False para desligar; valor padrão é True.
-Retorna qual é o estado do BIAS e de qual canal é.</p>
+<dt id="newCyton.newCyton.resetStringxX">
+<code class="descname">resetStringxX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.resetStringxX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.resetStringxX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre resetStringxX</p>
+<p>Função utilizada internamente para reiniciar a stringde envio em serial.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="newCyton.newCyton.escolher_Ganho">
-<code class="descname">escolher_Ganho</code><span class="sig-paren">(</span><em>canal</em>, <em>ganho=24</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.escolher_Ganho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.escolher_Ganho" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sobre ligar_Canal 
-:param canal: este parâmetro determina qual canal será ligado(1 a 8). 
-:param ganho: as opções de ganho são os valores 1, 2, 3, 4, 6, 12 e 24; o valor padrão é 24.
-Retorna qual é o valor do ganho e de qual canal.</p>
+<dt id="newCyton.newCyton.transforma_String">
+<code class="descname">transforma_String</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.transforma_String"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.transforma_String" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre transforma_String</p>
+<p>Função utilizada internamente para realizar as transformações necessárias do vetor [&#8216;x&#8217;, &#8216;0&#8217;, &#8216;0&#8217;, &#8216;0&#8217;, &#8216;0&#8217;, &#8216;0&#8217;, &#8216;0&#8217;, &#8216;0&#8217;,&#8217;X&#8217;] das funções que o utilizam, para que possa ser enviado em serial</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="newCyton.newCyton.escolher_Input">
-<code class="descname">escolher_Input</code><span class="sig-paren">(</span><em>canal</em>, <em>tipo='normal'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.escolher_Input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.escolher_Input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sobre escolher_Input 
-:param canal: este parâmetro determina qual canal será definido o tipo de input(1 a 8). 
-:param tipo: anormal, curto, BIAS, fonte, temperatura, sinalteste, BIASpos, BIASneg; o tipo deve estar entre aspas ex:&#8217;BIASpos&#8217;.
-Retorna qual é o tipo de input e qual canal.</p>
+<dt id="newCyton.newCyton.transforma_StringMaster">
+<code class="descname">transforma_StringMaster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.transforma_StringMaster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.transforma_StringMaster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre transforma_StringMaster</p>
+<p>Função para converter e enviar por serial todas as alterações acumuladas conforme são utilizados os comandos que modifiquem a string do tipo x0000000X.</p>
+<p>É recomendado o uso desta função se for realizar combinações de diversas alterações dos canais, para garantir as alterações, sem que sejam sobrescritas.</p>
+<p>Portanto, deve ser usado após usar as funções/combinações das funções: ligar_Canal; escolher_Ganho; escolher_Input ; ativar_BIAS ; ativar_SRB2 ; ativar_SRB1</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="newCyton.newCyton.ligar_Canal">
 <code class="descname">ligar_Canal</code><span class="sig-paren">(</span><em>canal</em>, <em>liga=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ligar_Canal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ligar_Canal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sobre ligar_Canal 
-:param canal: este parâmetro determina qual canal será ligado(1 a 8). 
-:param liga: o valor padrão é 1(ligado), mas pode ser 0(desligado).
-Retorna qual é o canal que foi ligado/desligado.
-:return ret_val: result information.</p>
+<dd><p>Sobre ligar_Canal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>canal</strong> &#8211; este parâmetro determina qual canal será ligado(1 a 8).</li>
+<li><strong>liga</strong> &#8211; o valor padrão é 1(ligado), mas pode ser 0(desligado).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Retorna qual é o canal que foi ligado/desligado.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="newCyton.newCyton.readSample">
-<code class="descname">readSample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.readSample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.readSample" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is about readSample. 
-:param abra: abra number. 
-:param cadabra: cadabra number.
-:param sesame: sesame information.
-:return ret_val: result information.
-:rtype: int.</p>
+<dt id="newCyton.newCyton.escolher_Ganho">
+<code class="descname">escolher_Ganho</code><span class="sig-paren">(</span><em>canal</em>, <em>ganho=24</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.escolher_Ganho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.escolher_Ganho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre ligar_Canal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>canal</strong> &#8211; este parâmetro determina qual canal será ligado(1 a 8).</li>
+<li><strong>ganho</strong> &#8211; as opções de ganho são os valores 1, 2, 3, 4, 6, 12 e 24; o valor padrão é 24.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Imprime qual é o valor do ganho e de qual canal.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="newCyton.newCyton.resetStringxX">
-<code class="descname">resetStringxX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.resetStringxX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.resetStringxX" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sobre resetStringxX 
-Função utilizada internamente para reiniciar a string.</p>
+<dt id="newCyton.newCyton.escolher_Input">
+<code class="descname">escolher_Input</code><span class="sig-paren">(</span><em>canal</em>, <em>tipo='normal'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.escolher_Input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.escolher_Input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre escolher_Input</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>canal</strong> &#8211; este parâmetro determina qual canal será definido o tipo de input(1 a 8).</li>
+<li><strong>tipo</strong> &#8211; normal, curto, BIAS, fonte, temperatura, sinalteste, BIASpos, BIASneg; o tipo deve estar entre aspas ex:&#8217;BIASpos&#8217;.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Imprime qual é o tipo de input e qual canal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.ativar_BIAS">
+<code class="descname">ativar_BIAS</code><span class="sig-paren">(</span><em>canal</em>, <em>BIAS=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ativar_BIAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ativar_BIAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre ativar_BIAS</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>canal</strong> &#8211; este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8).</li>
+<li><strong>BIAS</strong> &#8211; parâmetro True para ligar, False para desligar; valor padrão é True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Imprime qual é o estado do BIAS e de qual canal é.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.ativar_SRB2">
+<code class="descname">ativar_SRB2</code><span class="sig-paren">(</span><em>canal</em>, <em>SRB2=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ativar_SRB2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ativar_SRB2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre ativar_SRB2</p>
+<p>Conecta a entrada positiva do canal específico ao SRB2; fecha uma chave entre a entrada P ao pino SRB2. Várias entradas podem ser conectadas a este mesmo pino.
+:param canal: este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8). 
+:param SRB2: parâmetro True para ligar, False para desligar; valor padrão é True.</p>
+<p>Imprime qual é o estado do SRB2 e de qual canal é.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.ativar_SRB1">
+<code class="descname">ativar_SRB1</code><span class="sig-paren">(</span><em>canal</em>, <em>SRB1=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ativar_SRB1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ativar_SRB1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre ativar_SRB1</p>
+<p>SRB1 conecta todas as entradas negativas dos canais ao SRB1. Isto desconecta os canais negativos ao ADC(os canais  1-8 de conversão analógico-digitais)</p>
+<p>Apesar da opção estar disponível em todos os canais, a conexão força todos os canais negativos a serem conectados.
+:param canal: este parâmetro determina qual canal terá o BIAS ligado ou não(1 a 8). 
+:param SRB1: parâmetro True para ligar, False para desligar; valor padrão é True.</p>
+<p>Imprime qual é o estado do SRB1 e de qual canal é.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.configCanal">
+<code class="descname">configCanal</code><span class="sig-paren">(</span><em>canal=1</em>, <em>liga=1</em>, <em>ganho=1</em>, <em>tipo='normal'</em>, <em>BIAS=True</em>, <em>SRB2=True</em>, <em>SRB1=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.configCanal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.configCanal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre configCanal</p>
+<p>Esta função pode ser utilizada ao invés das funções anteriores, para configurar múltiplos parâmetros de um canal de uma vez.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>canal</strong> &#8211; este parâmetro determina qual é o canal a ser alterado.</li>
+<li><strong>liga</strong> &#8211; parâmetro ligado(liga = 1) ou desligado(liga = 0); valor padrão é ligado.</li>
+<li><strong>ganho</strong> &#8211; parâmetro do ganho, valores 1/2/3/4/6/12/24; valor padrão é 24.</li>
+<li><strong>tipo</strong> &#8211; parâmetro de input, tipos: &#8216;normal&#8217;,&#8217;curto&#8217;,&#8217;BIAS&#8217;,&#8217;fonte&#8217;,&#8217;temperatura&#8217;,&#8217;sinalteste&#8217;,&#8217;BIASpos&#8217;,&#8217;BIASneg&#8217;; valor padrão é &#8216;normal&#8217;.</li>
+<li><strong>bias</strong> &#8211; parâmetro do bias; True para ligar, False para desligar; valor padrão é True.</li>
+<li><strong>srb2</strong> &#8211; parâmetro  do srb2; True para ligar, False para desligar; valor padrão é True.</li>
+<li><strong>srb1</strong> &#8211; parâmetro do srb1; True para ligar, False para desligar; valor padrão é True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Imprime qual é o estado do SRB1 e de qual canal é.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.testGND">
+<code class="descname">testGND</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.testGND"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.testGND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre testGND</p>
+<p>Esta função gera um sinal ground/terra para todos os 8 canais, pode ser utilizado para teste.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.test1xAmpSlow">
+<code class="descname">test1xAmpSlow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.test1xAmpSlow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.test1xAmpSlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre test1xAmpSlow</p>
+<p>Esta função gera um sinal de onda quadrada lento, com ganho 1, para todos canais.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.test1xAmpFast">
+<code class="descname">test1xAmpFast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.test1xAmpFast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.test1xAmpFast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre test1xAmpSlow</p>
+<p>Esta função gera um sinal de onda quadrada rápido, com ganho 1, para todos canais.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.testDC">
+<code class="descname">testDC</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.testDC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.testDC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre testDC</p>
+<p>Esta função gera um sinal CC, contínuo, para todos canais.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.test2xAmpSlow">
+<code class="descname">test2xAmpSlow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.test2xAmpSlow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.test2xAmpSlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre test2xAmpSlow</p>
+<p>Esta função gera um sinal de onda quadrada lento, com ganho 2, para todos canais.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.test2xAmpFast">
+<code class="descname">test2xAmpFast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.test2xAmpFast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.test2xAmpFast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre test2xAmpFast</p>
+<p>Esta função gera um sinal de onda quadrada lento, com ganho 2, para todos canais.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.padrao">
+<code class="descname">padrao</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.padrao"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.padrao" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre padrao</p>
+<p>Esta função envia em serial para todos os canais, e os modificam para a configurações padrão; canal ligado, ganho de 24, tipo de input &#8216;normal&#8217;,BIAS, SRB2 e SRB1 com valores de True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.padraoRelatorio">
+<code class="descname">padraoRelatorio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.padraoRelatorio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.padraoRelatorio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre padraoRelatorio</p>
+<p>É recebido um relatório sobre as configurações padrão.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.zDoCh">
+<code class="descname">zDoCh</code><span class="sig-paren">(</span><em>canal=1</em>, <em>pchan=0</em>, <em>nchan=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.zDoCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.zDoCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre zDoCh</p>
+<p>O comando enviado é similar à configuração de canais, z e Z são start e end bits respectivamente.
+É enviado um sinal CA de 31.5Hz nos polos dos canais, para checar se a impedância está correta.
+Se o canal for atenuado, confirma impedância adequada, sem a atenuação pode indicar má conexão.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>canal</strong> &#8211; este parâmetro configura o canal específico, aceita valores de 1 a 8 correspondente aos canais.
+:param pchan: parâmetro aceita 0 ou 1 como valores, com 0 não é aplicada a impedância na entrada positiva do canal, com 1 é aplicado.</li>
+<li><strong>nchan</strong> &#8211; parâmetro aceita 0 ou 1 como valores, com 0 não é aplicada a impedância na entrada negativa do canal, com 1 é aplicado.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="newCyton.newCyton.sdTime5m">
 <code class="descname">sdTime5m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime5m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime5m" title="Permalink to this definition">¶</a></dt>
-<dd><p>Comandos do Cartão SD (SD card Commands):
-O comando é utilizado para realizar registro por certo período de tempo das leituras feitas pela placa, fazendo data logging no cartão SD.    
+<dd><p>Sobre sdTime5m</p>
+<p>O arquivo de texto gerado tem nome inicial: OBCI_01.txt, com incrementos conforme são gravados outros arquivos.
+Os dados obtidos pela aquisição têm o formato: Número da amostra / 8 valores dos canais / 3 valores dos acelerômetros
+Os dados estão em hexadecimal.</p>
+<p>Comandos do Cartão SD (SD card Commands):</p>
+<p>O comando é utilizado para realizar registro a cada certo período de tempo das leituras feitas pela placa, fazendo data logging no cartão SD.    
 sdTime5m/15m/30m/60m/120m/240m/720m/1440m/14s &lt;=&gt; 5 min./15 min./30 min./60 min./120 min./240 min./720 min./1440 min./14 segs. de registro
-Parar o logging e fechar o arquivo SD: sdStop</p>
+Isso significa que será realizada a impressão dos dados a cada intervalo, por exemplo, de 14 em 14 segundos é feito um registro no arquivo de texto.</p>
+<p>Para parar o logging e fechar o arquivo SD: sdStop; a função deve ser utilizada se quiser interromper o logging.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="newCyton.newCyton.start_streaming">
-<code class="descname">start_streaming</code><span class="sig-paren">(</span><em>callback</em>, <em>lapse=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.start_streaming"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.start_streaming" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start handling streaming data from the board. Call a provided callback
-for every single sample that is processed (every two samples with daisy module).</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>callback: A callback function, or a list of functions, that will receive a single</dt>
-<dd>argument of the OpenBCISample object captured.</dd>
-</dl>
-</dd>
-</dl>
+<dt id="newCyton.newCyton.sdTime15m">
+<code class="descname">sdTime15m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime15m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime15m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime15m</p>
+<p>Logging no cartão SD até 15 minutos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime30m">
+<code class="descname">sdTime30m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime30m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime30m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime30m</p>
+<p>Logging no cartão SD até 30 minutos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime60m">
+<code class="descname">sdTime60m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime60m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime60m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime60m</p>
+<p>Logging no cartão SD até 60 minutos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime120m">
+<code class="descname">sdTime120m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime120m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime120m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime120m</p>
+<p>Logging no cartão SD até 120 minutos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime240m">
+<code class="descname">sdTime240m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime240m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime240m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime240m</p>
+<p>Logging no cartão SD até 240 minutos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime720m">
+<code class="descname">sdTime720m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime720m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime720m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime720m</p>
+<p>Logging no cartão SD até 720 minutos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime1440m">
+<code class="descname">sdTime1440m</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime1440m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime1440m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime1440m</p>
+<blockquote>
+<div>Logging no cartão SD até 1440 minutos.</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdTime14s">
+<code class="descname">sdTime14s</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdTime14s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdTime14s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime14s</p>
+<blockquote>
+<div>Logging no cartão SD até 14 segundos.</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sdStop">
+<code class="descname">sdStop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sdStop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sdStop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sdTime14s</p>
+<p>sdStop interrompe o logging.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.adslisRelatorio">
+<code class="descname">adslisRelatorio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.adslisRelatorio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.adslisRelatorio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre adslisRelatorio</p>
+<p>É gerado relatório similar ao presente no __init__ do newCyton.py, com as configurações do ADS1299 e LIS3DH.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.softReset">
+<code class="descname">softReset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.softReset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.softReset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre softReset</p>
+<p>A placa realiza um soft reset, reinicializando o streaming e as configurações modificadas antes do reset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.daisyChOff">
+<code class="descname">daisyChOff</code><span class="sig-paren">(</span><em>canal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.daisyChOff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.daisyChOff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre daisyChOff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>canal</strong> &#8211; O canal daisy correspondente aos comandos &#8216;q&#8217;,&#8217;w&#8217;,&#8217;e&#8217;,&#8217;r&#8217;,&#8217;t&#8217;,&#8217;y&#8217;,&#8217;u&#8217;,&#8217;i&#8217; &lt;=&gt; canais 9,10,11,12,13,14,15,16, é desligado.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.daisyChOn">
+<code class="descname">daisyChOn</code><span class="sig-paren">(</span><em>canal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.daisyChOn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.daisyChOn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre daisyChOn</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>canal</strong> &#8211; O canal daisy correspondente aos comandos &#8216;Q&#8217;,&#8217;W&#8217;,&#8217;E&#8217;,&#8217;R&#8217;,&#8217;T&#8217;,&#8217;Y&#8217;,&#8217;U&#8217;,&#8217;I&#8217; &lt;=&gt; canais 9,10,11,12,13,14,15,16, é ligado.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.maxCh8">
+<code class="descname">maxCh8</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.maxCh8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.maxCh8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre maxCh8</p>
+<p>O comando força o uso dos 8 canais originais da Cyton, impede a conexão da Cyton e a placa Daisy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.maxCh16">
+<code class="descname">maxCh16</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.maxCh16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.maxCh16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre maxCh16</p>
+<p>O comando permite o uso dos 16 canais, somando os canais da Daisy aos originais da Cyton.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.timeStamp">
+<code class="descname">timeStamp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.timeStamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.timeStamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre timeStamp</p>
+<p>Inicia o time stamping dos dados.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.timeStop">
+<code class="descname">timeStop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.timeStop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.timeStop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre timeStop</p>
+<p>Desliga o time stamping dos dados.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radioGet">
+<code class="descname">radioGet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radioGet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radioGet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radioGet</p>
+<p>O comando tenta realizar conexão de rádio, retornando sucesso ou falha.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radioSet">
+<code class="descname">radioSet</code><span class="sig-paren">(</span><em>radSet</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radioSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radioSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radioSet</p>
+<p>Retorna a falha ou sucesso, sucesso se o host e o aparelho estiverem com o mesmo valor; também retorna em HEX o valor do canal.
+O 0x07 é opcional, para determinar o canal, de 1 a 25 em HEX. De 0x01 a 0x19</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radioOver">
+<code class="descname">radioOver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radioOver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radioOver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radioOver</p>
+<p>Retorna falha ou sucesso, força a troca de canal do Host para o canal(opcional); de 0x01 a 0x19.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radioPoll">
+<code class="descname">radioPoll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radioPoll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radioPoll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radioPoll</p>
+<p>Retorna o pool time, pode significar erros e está associado com as capacidades do sistema. Retornado em HEX o poll time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radioPollSet">
+<code class="descname">radioPollSet</code><span class="sig-paren">(</span><em>pollSet=80</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radioPollSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radioPollSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radioSet</p>
+<p>A terceira opção determina o poll time em HEX, são aceitos valores de 0 a 255, em ms. Padrão é de 80ms.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radio115kHz">
+<code class="descname">radio115kHz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radio115kHz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radio115kHz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radio115kHz</p>
+<p>Configura o Baud Rate para 115200Hz do sistema de rádio.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radio230kHz">
+<code class="descname">radio230kHz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radio230kHz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radio230kHz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radio230kHz</p>
+<p>Configura o Baud Rate para 230400Hz do sistema de rádio.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radio921kHz">
+<code class="descname">radio921kHz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radio921kHz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radio921kHz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radio921kHz</p>
+<p>Configura o Baud Rate para 921600Hz do sistema de rádio.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.radioRelat">
+<code class="descname">radioRelat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.radioRelat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.radioRelat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre radio921kHz</p>
+<p>Checa o status do sistema de rádio, confirma ou nega se está operante.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sample16k">
+<code class="descname">sample16k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sample16k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sample16k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sample16k</p>
+<p>Esta função modifica a taxa de aquisição para 16000Hz; sobre as funções &#8216;sample&#8217; que alteram as taxas de aquisição, estas não foram testadas por indisponibilidade do hardware.</p>
+<p>A transferência de dados através do USB Dongle tem a taxa de aquisição é restrita a 250Hz. Para realmente poder utilizar as diferentes taxas de aquisição deve ser utilizado  o hardware WiFi Shield.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sample8k">
+<code class="descname">sample8k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sample8k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sample8k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sample8k</p>
+<p>Esta função modifica a taxa de aquisição para 8000Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sample4k">
+<code class="descname">sample4k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sample4k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sample4k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sample4k</p>
+<p>Esta função modifica a taxa de aquisição para 4000Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sample2k">
+<code class="descname">sample2k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sample2k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sample2k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sample2k</p>
+<p>Esta função modifica a taxa de aquisição para 2000Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sample1k">
+<code class="descname">sample1k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sample1k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sample1k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sample2k</p>
+<p>Esta função modifica a taxa de aquisição para 1000Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sample500">
+<code class="descname">sample500</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sample500"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sample500" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sample500</p>
+<p>Esta função modifica a taxa de aquisição para 500Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sample250">
+<code class="descname">sample250</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sample250"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sample250" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sample250</p>
+<p>Esta função modifica a taxa de aquisição para 250Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.sampleStatus">
+<code class="descname">sampleStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.sampleStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.sampleStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre sampleStatus</p>
+<p>Esta função retorna a taxa de aquisição configurada.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.boardModeDef">
+<code class="descname">boardModeDef</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.boardModeDef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.boardModeDef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre boardModeDef</p>
+<p>Esta função determina o modo da placa Cyton para modo padrão (default); isto é, mandar os dados do acelerômetro nos bytes auxiliares do arquivo.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.boardModeDebug">
+<code class="descname">boardModeDebug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.boardModeDebug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.boardModeDebug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre boardModeDebug</p>
+<p>Esta função determina o modo da placa Cyton para modo de debug. Envia sinais pela saída de seria, para
+ser utilizado para debug.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.boardModeAnalog">
+<code class="descname">boardModeAnalog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.boardModeAnalog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.boardModeAnalog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre boardModeAnalog</p>
+<p>Esta função determina o modo da placa Cyton para modo analógico.
+Realiza leitura dos pinos analógicos A5 e A6; se não estiver disponível o Wifi Shield,
+lê também o pino A7.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.boardModeDigital">
+<code class="descname">boardModeDigital</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.boardModeDigital"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.boardModeDigital" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre boardModeDigital</p>
+<p>Esta função determina o modo da placa Cyton para modo digital.
+Realiza leitura dos pinos analógicos D11,D12 e D17; se não estiver disponível o Wifi Shield,
+lê também os pinos D13 e D18.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.boardModeMarker">
+<code class="descname">boardModeMarker</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.boardModeMarker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.boardModeMarker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre boardModeMarker</p>
+<p>Esta função determina o modo da placa Cyton para modo marcador.
+Desliga o acelerômetro e posiciona marcadores no stream de dados, enviando &#8220;_x_&#8221; onde</p>
+<blockquote>
+<div>x é</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.boardModeStatus">
+<code class="descname">boardModeStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.boardModeStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.boardModeStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre boardModeStatus</p>
+<p>Esta função determina o modo da placa Cyton para retornar o modo em que a placa está.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.WifiShieldSync">
+<code class="descname">WifiShieldSync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.WifiShieldSync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.WifiShieldSync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre WifiShieldSync</p>
+<p>Esta função realiza uma tentativa de sincronização com o shield de Wifi.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.WifiShieldDesync">
+<code class="descname">WifiShieldDesync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.WifiShieldDesync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.WifiShieldDesync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre WifiShieldDesync</p>
+<p>Esta função realiza uma tentativa de desincronização com o shield de Wifi.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.WifiShieldStatus">
+<code class="descname">WifiShieldStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.WifiShieldStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.WifiShieldStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre WifiShieldStatus</p>
+<p>Esta função retorna a o status do Wifi Shield, se está presente ou não.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.WifiShieldReset">
+<code class="descname">WifiShieldReset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.WifiShieldReset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.WifiShieldReset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre WifiShieldReset</p>
+<p>Esta função reinicia o Wifi Shield.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.ativaFiltro60Hz">
+<code class="descname">ativaFiltro60Hz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.ativaFiltro60Hz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.ativaFiltro60Hz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre ativaFiltro60Hz</p>
+<p>Esta função ativa o filtro interno da placa, de 60Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.desativaFiltro60Hz">
+<code class="descname">desativaFiltro60Hz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.desativaFiltro60Hz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.desativaFiltro60Hz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre desativaFiltro60Hz</p>
+<p>Esta função desativa o filtro interno da placa, de 60Hz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="newCyton.newCyton.versaoFirmware">
+<code class="descname">versaoFirmware</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/newCyton.html#newCyton.versaoFirmware"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#newCyton.newCyton.versaoFirmware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sobre versaoFirmware</p>
+<p>Esta função retorna a versão do firmware.</p>
 </dd></dl>
 
 </dd></dl>
 
-<span class="target" id="module-cyton"></span><p>Core OpenBCI object for handling connections and samples from the board.</p>
-<p>EXAMPLE USE:</p>
-<dl class="docutils">
-<dt>def handle_sample(sample):</dt>
-<dd>print(sample.channel_data)</dd>
-</dl>
-<p>c
-board = OpenBCIBoard()
-board.print_register_settings()
-board.start_streaming(handle_sample)</p>
-<dl class="docutils">
-<dt>NOTE: If daisy modules is enabled, the callback will occur every two samples, hence &#8220;packet_id&#8221;</dt>
-<dd>will only contain even numbers. As a side effect, the sampling rate will be divided by 2.</dd>
-</dl>
-<p>FIXME: at the moment we can just force daisy mode, do not check that the module is detected.
-TODO: enable impedance</p>
-<dl class="class">
-<dt id="cyton.OpenBCICyton">
-<em class="property">class </em><code class="descclassname">cyton.</code><code class="descname">OpenBCICyton</code><span class="sig-paren">(</span><em>port=None</em>, <em>baud=115200</em>, <em>filter_data=True</em>, <em>scaled_output=True</em>, <em>daisy=False</em>, <em>aux=False</em>, <em>impedance=False</em>, <em>log=True</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Handle a connection to an OpenBCI board.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>port: The port to connect to.
-baud: The baud of the serial connection.
-daisy: Enable or disable daisy module and 16 chans readings
-aux, impedance: unused, for compatibility with ganglion API</dd>
-</dl>
-<dl class="method">
-<dt id="cyton.OpenBCICyton.check_connection">
-<code class="descname">check_connection</code><span class="sig-paren">(</span><em>interval=2</em>, <em>max_packets_to_skip=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.check_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.check_connection" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.disable_filters">
-<code class="descname">disable_filters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.disable_filters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.disable_filters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.disconnect">
-<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.disconnect" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.enable_filters">
-<code class="descname">enable_filters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.enable_filters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.enable_filters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.find_port">
-<code class="descname">find_port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.find_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.find_port" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.getBoardType">
-<code class="descname">getBoardType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getBoardType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getBoardType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the version of the board</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.getNbAUXChannels">
-<code class="descname">getNbAUXChannels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getNbAUXChannels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getNbAUXChannels" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.getNbEEGChannels">
-<code class="descname">getNbEEGChannels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getNbEEGChannels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getNbEEGChannels" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.getNbImpChannels">
-<code class="descname">getNbImpChannels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getNbImpChannels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getNbImpChannels" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.getSampleRate">
-<code class="descname">getSampleRate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.getSampleRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.getSampleRate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.openbci_id">
-<code class="descname">openbci_id</code><span class="sig-paren">(</span><em>serial</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.openbci_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.openbci_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>When automatically detecting port, parse the serial return for the &#8220;OpenBCI&#8221; ID.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.print_bytes_in">
-<code class="descname">print_bytes_in</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_bytes_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_bytes_in" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.print_incoming_text">
-<code class="descname">print_incoming_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_incoming_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_incoming_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>When starting the connection, print all the debug data until
-we get to a line with the end sequence &#8216;$$$&#8217;.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.print_packets_in">
-<code class="descname">print_packets_in</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_packets_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_packets_in" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.print_register_settings">
-<code class="descname">print_register_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.print_register_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.print_register_settings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.reconnect">
-<code class="descname">reconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.reconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.reconnect" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.ser_inWaiting">
-<code class="descname">ser_inWaiting</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.ser_inWaiting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.ser_inWaiting" title="Permalink to this definition">¶</a></dt>
-<dd><p>Access serial port object for inWaiting</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.ser_read">
-<code class="descname">ser_read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.ser_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.ser_read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Access serial port object for read</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.ser_write">
-<code class="descname">ser_write</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.ser_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.ser_write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Access serial port object for write</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.setImpedance">
-<code class="descname">setImpedance</code><span class="sig-paren">(</span><em>flag</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.setImpedance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.setImpedance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable/disable impedance measure. Not implemented at the moment on Cyton.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.set_channel">
-<code class="descname">set_channel</code><span class="sig-paren">(</span><em>channel</em>, <em>toggle_position</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.set_channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.set_channel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable / disable channels</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.start_streaming">
-<code class="descname">start_streaming</code><span class="sig-paren">(</span><em>callback</em>, <em>lapse=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.start_streaming"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.start_streaming" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start handling streaming data from the board. Call a provided callback
-for every single sample that is processed (every two samples with daisy module).</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>callback: A callback function, or a list of functions, that will receive a single</dt>
-<dd>argument of the OpenBCISample object captured.</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.stop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.test_signal">
-<code class="descname">test_signal</code><span class="sig-paren">(</span><em>signal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.test_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.test_signal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable / disable test signal</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cyton.OpenBCICyton.warn">
-<code class="descname">warn</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCICyton.warn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCICyton.warn" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cyton.OpenBCISample">
-<em class="property">class </em><code class="descclassname">cyton.</code><code class="descname">OpenBCISample</code><span class="sig-paren">(</span><em>packet_id</em>, <em>channel_data</em>, <em>aux_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cyton.html#OpenBCISample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cyton.OpenBCISample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Object encapulsating a single sample from the OpenBCI board.
-NB: dummy imp for plugin compatiblity</p>
-</dd></dl>
-
-<span class="target" id="module-usaCyton"></span><div class="section" id="usacyton-py">
-<h4>usaCyton.py<a class="headerlink" href="#usacyton-py" title="Permalink to this headline">¶</a></h4>
-<p>Módulo final, com interface para controle da placa.</p>
-</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="indices-and-tables">
@@ -349,12 +692,12 @@ NB: dummy imp for plugin compatiblity</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introdução ao newCyton / Introduction to newCyton</a><ul>
-<li><a class="reference internal" href="#bem-vindo-a-documentacao-do-newcyton">Bem-vindo à documentação do newCyton!</a></li>
-<li><a class="reference internal" href="#welcome-newcyton-s-documentation">Welcome newCyton&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#">Introdução ao newCyton</a><ul>
+<li><a class="reference internal" href="#bem-vindo-a-documentacao-do-newcyton">Bem-vindo à documentação do newCyton!</a><ul>
 <li><a class="reference internal" href="#links">Links</a></li>
-<li><a class="reference internal" href="#teste2">Teste2</a><ul>
-<li><a class="reference internal" href="#usacyton-py">usaCyton.py</a></li>
+<li><a class="reference internal" href="#documentacao">Documentação</a></li>
+<li><a class="reference internal" href="#module-newCyton">Conteúdo dos arquivos:</a><ul>
+<li><a class="reference internal" href="#newcyton-py">newCyton.py</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
@@ -363,13 +706,7 @@ NB: dummy imp for plugin compatiblity</p>
 </ul>
 </li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-  </ul></li>
-</ul>
-</div>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -391,20 +728,21 @@ NB: dummy imp for plugin compatiblity</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, Author.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
-      
-      |
-      <a href="_sources/index.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">TG_Projeto_BCI_4  documentation</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
   </body>
 </html>
