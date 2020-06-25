@@ -49,7 +49,6 @@ Conteúdo dos arquivos:
    :members:
 
 
-
 .. automodule:: useCyton
    :members:
    :undoc-members:

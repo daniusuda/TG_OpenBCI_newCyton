@@ -31,24 +31,24 @@ x=nCyton.newCyton()
 #x.sample16k()
 #x.test2xAmpSlow()
 
-x.sdTime15m()
-
-x.configCanal(canal = 1,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-time.sleep(2)
-x.configCanal(canal = 2,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-time.sleep(2)
-x.configCanal(canal = 3,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-time.sleep(2)
-x.configCanal(canal = 4,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-time.sleep(2)
-x.configCanal(canal = 5,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-time.sleep(2)
-x.configCanal(canal = 6,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-time.sleep(2)
-x.configCanal(canal = 7,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-time.sleep(2)
-x.configCanal(canal = 8,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
-
+#x.sdTime15m()
+#
+#x.configCanal(canal = 1,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#time.sleep(2)
+#x.configCanal(canal = 2,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#time.sleep(2)
+#x.configCanal(canal = 3,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#time.sleep(2)
+#x.configCanal(canal = 4,liga = 1,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#time.sleep(2)
+#x.configCanal(canal = 5,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#time.sleep(2)
+#x.configCanal(canal = 6,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#time.sleep(2)
+#x.configCanal(canal = 7,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#time.sleep(2)
+#x.configCanal(canal = 8,liga = 0,ganho = 24,tipo = 'normal',BIAS = 1,SRB2 = 0,SRB1 = 0)
+#
 #x.sdTime14s() #Tempo para coleta de dados do cartão SD de 14 segundos
 #x.sdTime5m() #Tempo para coleta de dados do cartão SD de 5 minutos
 
