@@ -3,7 +3,7 @@ This is a minimalist Python module for controlling the biomedical signal samplin
 
 If you are planning on using the OpenBCI_GUI, be aware that it does not work on 32-bit operating systems, as it was tested in this project.
 
-If you were searching for another method of controlling the board, there's the Brainflow project: https://brainflow.readthedocs.io/en/stable/Examples.html#python
+If you were searching for a more general method of controlling the board, for other programming languages there's the Brainflow project: https://brainflow.readthedocs.io/en/stable/index.html
 
 The "newCyton.py" file contains the functions to control the OpenBCI Cyton board, such as customizing the sampling channels and changing the sample rate. The documentation and comments describe the possible functions you can send to control your Cyton.
 
